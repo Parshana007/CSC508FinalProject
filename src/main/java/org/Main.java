@@ -1,7 +1,12 @@
 package org;
 
-public class Main {
-    public static void main(String[] args) {
-        System.out.println("Hello, World!");
+import javax.swing.*;
+
+public class Main extends JFrame {
+    public Main() {
+        Panel panel = new Panel();
+        this.add(panel);
+
+        Blackboard.getInstance().addPropertyChangeListener(panel);
     }
 }
