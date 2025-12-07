@@ -11,7 +11,14 @@ public class LlamaClient {
         this.apiKey = apiKey;
     }
 
+
+
     public String ask(String prompt) {
+
+        String safePrompt = prompt
+                .replace("\\", "\\\\")
+                .replace("\"", "\\\"")
+                .replace("\n", "\\n");
 
         String body = """
         {
@@ -20,7 +27,7 @@ public class LlamaClient {
             {"role": "user", "content": "%s"}
           ]
         }
-        """.formatted(prompt.replace("\"", "'")); // prevent JSON break
+        """.formatted(safePrompt); // prevent JSON break
 
         HttpRequest request = HttpRequest.newBuilder()
             .uri(URI.create("https://api.groq.com/openai/v1/chat/completions"))
