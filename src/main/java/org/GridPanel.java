@@ -1,20 +1,32 @@
 package org;
 
 import javax.swing.*;
-import java.awt.*;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseMotionListener;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
+import java.util.ArrayList;
+import java.util.List;
 
-public class Panel extends JPanel implements PropertyChangeListener, MouseMotionListener {
+public class GridPanel extends JPanel implements PropertyChangeListener, MouseMotionListener {
+    List<Ship> ships;
+    List<HitMiss> guesses;
+    // if in edit mode, moving the mouse will move the ship being placed (activeShip)
+    boolean editMode;
+    Ship activeShip;
 
-    public Panel() {
-        setBackground(Color.white);
+    public GridPanel(boolean editMode) {
+        ships = new ArrayList<>();
+        guesses = new ArrayList<>();
+        this.editMode = editMode;
         this.addMouseMotionListener(this);
-        this.setFocusable(true);
-        this.requestFocusInWindow();
     }
+
+    public void addGuess(HitMiss guess) {
+        this.guesses.add(guess);
+        // draw the guess
+    }
+
     @Override
     protected void paintComponent(java.awt.Graphics g) {
         super.paintComponent(g);

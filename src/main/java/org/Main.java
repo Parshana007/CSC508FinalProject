@@ -5,10 +5,10 @@ import java.awt.*;
 
 public class Main extends JFrame {
     public Main() {
-        Panel panel = new Panel();
-        this.add(panel);
+        MainPanel mainPanel = new MainPanel();
+        this.add(mainPanel);
 
-        Blackboard.getInstance().addPropertyChangeListener(panel);
+        Blackboard.getInstance().addPropertyChangeListener(mainPanel);
     }
 
     public static void main(String[] args) {
