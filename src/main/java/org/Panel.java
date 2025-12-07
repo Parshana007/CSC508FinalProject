@@ -10,7 +10,7 @@ import java.beans.PropertyChangeListener;
 public class Panel extends JPanel implements PropertyChangeListener, MouseMotionListener {
 
     public Panel() {
-        setBackground(new Color(172, 248, 199));
+        setBackground(Color.white);
         this.addMouseMotionListener(this);
         this.setFocusable(true);
         this.requestFocusInWindow();
