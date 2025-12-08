@@ -4,12 +4,7 @@ import javax.swing.*;
 import java.awt.*;
 
 public class WelcomeScreen extends JPanel {
-    private JTextField playerNameField;
-    private JRadioButton onePlayerButton;
-    private JRadioButton twoPlayerButton;
-    private JLabel roomCodeLabel;
-    private JTextField roomCodeField;
-    private JPanel roomCodePanel;
+
 
     public WelcomeScreen() {
         setBackground(Color.WHITE);
@@ -22,6 +17,14 @@ public class WelcomeScreen extends JPanel {
     }
 
     private void initialize() {
+        // TODO do i need this?
+        JRadioButton onePlayerButton;
+        JLabel roomCodeLabel;
+        JTextField playerNameField;
+        JRadioButton twoPlayerButton;
+        JTextField roomCodeField;
+        JPanel roomCodePanel;
+
         // Title
         JLabel titleLabel = new JLabel("Welcome to Battleship!");
         titleLabel.setFont(new Font("SansSerif", Font.PLAIN, 24));
@@ -75,7 +78,30 @@ public class WelcomeScreen extends JPanel {
         startButton.setFont(new Font("SansSerif", Font.PLAIN, 16));
         startButton.setAlignmentX(Component.CENTER_ALIGNMENT);
         // startGame is the panel when clicking the button start game
-        startButton.addActionListener(e -> startGame());
+//        startButton.addActionListener(e -> startGame());
+
+        // TODO REVIEW
+        startButton.addActionListener(e -> {
+            String playerName = playerNameField.getText();
+
+//            Blackboard.setValue("playerName", playerName);
+            System.out.println(playerName);
+
+
+            if (twoPlayerButton.isSelected()) {
+                String roomCode = roomCodeField.getText();
+//                Blackboard.setValue("roomCode", roomCode);
+//                Blackboard.setValue("mode", "twoPlayer");
+                System.out.println(roomCode);
+
+            } else {
+//                Blackboard.setValue("mode", "onePlayer");
+            }
+
+//            Blackboard.setValue("screen", "mainPanel");
+        });
+
+
         add(startButton);
 
         // allows user to pick one player or two player mode
