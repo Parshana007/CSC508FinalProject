@@ -25,5 +25,18 @@ public class Main extends JFrame {
         // "waiting for other player to submit..."
 
         // both players have submitted ship placements - advance to main game screen
+
+
+        SwingUtilities.invokeLater(() -> {
+            Main main = new Main();
+            main.setTitle("Battleship");
+            main.setSize(1200, 600);
+            main.setResizable(false);
+            main.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+            main.setVisible(true);
+        });
+
+//        MyPublisher publisher = new MyPublisher();
+//        Blackboard.getInstance().addPropertyChangeListener(publisher);
     }
 }

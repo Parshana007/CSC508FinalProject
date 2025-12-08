@@ -1,6 +1,7 @@
 package org;
 
 import javax.swing.*;
+import java.awt.*;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseMotionListener;
 import java.beans.PropertyChangeEvent;
@@ -20,6 +21,9 @@ public class GridPanel extends JPanel implements PropertyChangeListener, MouseMo
         guesses = new ArrayList<>();
         this.editMode = editMode;
         this.addMouseMotionListener(this);
+        setBackground(Color.blue);
+        this.setFocusable(true);
+        this.requestFocusInWindow();
     }
 
     public void addGuess(HitMiss guess) {
@@ -30,6 +34,25 @@ public class GridPanel extends JPanel implements PropertyChangeListener, MouseMo
     @Override
     protected void paintComponent(java.awt.Graphics g) {
         super.paintComponent(g);
+        drawGrid(g);
+    }
+
+    private void drawGrid(Graphics g) {
+        int rows = 10;
+        int cols = 10;
+
+        int cellWidth = getWidth() / cols;
+        int cellHeight = getHeight() / rows;
+
+        g.setColor(Color.DARK_GRAY);
+
+        for (int row = 0; row < rows; row++) {
+            for (int col = 0; col < cols; col++) {
+                int x = col * cellWidth;
+                int y = row * cellHeight;
+                g.drawRect(x, y, cellWidth, cellHeight);
+            }
+        }
     }
 
     @Override
