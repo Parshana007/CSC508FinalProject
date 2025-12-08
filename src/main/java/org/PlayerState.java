@@ -1,0 +1,60 @@
+package org;
+
+import java.util.ArrayList;
+import java.util.List;
+
+
+public class PlayerState {
+
+    private List<Ship> myShips;
+    private HitMiss myHitMiss;
+
+    public PlayerState() {
+        myShips = new ArrayList<>();
+        myHitMiss = new HitMiss();
+    }
+
+    public void addShip(Ship ship) {
+        this.myShips.add(ship);
+    }
+
+    // Opponent guesses a coordinate player decides if hit/miss/sunk
+    public PlayerMoveResult addHitMiss(String coordinate) {
+        for (Ship ship : this.myShips) {
+            if (ship.getCoordinates().contains(coordinate)) {
+                this.myHitMiss.addHit(coordinate);
+                MoveResult r = checkSunk(ship);
+
+                if (r == MoveResult.SUNK) {
+                    return new PlayerMoveResult(
+                            MoveResult.SUNK,
+                            coordinate,
+                            ship.getCoordinates()
+                    );
+                }
+
+                return new PlayerMoveResult(MoveResult.HIT, coordinate);
+            }
+        }
+        this.myHitMiss.addMiss(coordinate);
+        return new PlayerMoveResult(MoveResult.MISS, coordinate);
+    }
+
+    public MoveResult checkSunk(Ship ship) {
+        int shipSize = ship.getCoordinates().size();
+        int counter = 0;
+
+        for (String hit: this.myHitMiss.getHits()) {
+            if (ship.getCoordinates().contains(hit)) {
+                counter++;
+            }
+        }
+
+        if (counter == shipSize) {
+            this.myHitMiss.addSunkShip(ship);
+            return MoveResult.SUNK;
+        }
+        return MoveResult.HIT;
+    }
+
+}
