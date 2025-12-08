@@ -18,36 +18,36 @@ public class WelcomeScreen extends JPanel {
         this.setFocusable(true);
         this.requestFocusInWindow();
 
-        initializeComponents();
+        initialize();
     }
 
-    private void initializeComponents() {
+    private void initialize() {
         // Title
-        JLabel titleLabel = new JLabel("Welcome to Battle..");
-        titleLabel.setFont(new Font("Arial", Font.PLAIN, 24));
+        JLabel titleLabel = new JLabel("Welcome to Battleship!");
+        titleLabel.setFont(new Font("SansSerif", Font.PLAIN, 24));
         titleLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
         add(titleLabel);
-        add(Box.createRigidArea(new Dimension(0, 30)));
+//        add(Box.createRigidArea(new Dimension(0, 30)));
 
         // Player name panel
         JPanel namePanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
         JLabel nameLabel = new JLabel("PlayerName:");
-        nameLabel.setFont(new Font("Arial", Font.PLAIN, 16));
+        nameLabel.setFont(new Font("SansSerif", Font.PLAIN, 16));
         playerNameField = new JTextField(15);
-        playerNameField.setFont(new Font("Arial", Font.PLAIN, 14));
+        playerNameField.setFont(new Font("SansSerif", Font.PLAIN, 14));
         namePanel.add(nameLabel);
         namePanel.add(playerNameField);
         add(namePanel);
-        add(Box.createRigidArea(new Dimension(0, 20)));
+//        add(Box.createRigidArea(new Dimension(0, 20)));
 
         // Player mode panel
         JPanel modePanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
         ButtonGroup buttonGroup = new ButtonGroup();
 
         onePlayerButton = new JRadioButton("1 player", true);
-        onePlayerButton.setFont(new Font("Arial", Font.PLAIN, 16));
+        onePlayerButton.setFont(new Font("SansSerif", Font.PLAIN, 16));
         twoPlayerButton = new JRadioButton("2 player");
-        twoPlayerButton.setFont(new Font("Arial", Font.PLAIN, 16));
+        twoPlayerButton.setFont(new Font("SansSerif", Font.PLAIN, 16));
 
         buttonGroup.add(onePlayerButton);
         buttonGroup.add(twoPlayerButton);
@@ -61,9 +61,9 @@ public class WelcomeScreen extends JPanel {
         // Room code panel (initially hidden)
         roomCodePanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
         roomCodeLabel = new JLabel("RoomCode:");
-        roomCodeLabel.setFont(new Font("Arial", Font.PLAIN, 14));
+        roomCodeLabel.setFont(new Font("SansSerif", Font.PLAIN, 14));
         roomCodeField = new JTextField(12);
-        roomCodeField.setFont(new Font("Arial", Font.PLAIN, 14));
+        roomCodeField.setFont(new Font("SansSerif", Font.PLAIN, 14));
         roomCodePanel.add(roomCodeLabel);
         roomCodePanel.add(roomCodeField);
         roomCodePanel.setVisible(false); // Initially hidden
@@ -72,12 +72,14 @@ public class WelcomeScreen extends JPanel {
 
         // Start button
         JButton startButton = new JButton("Start");
-        startButton.setFont(new Font("Arial", Font.PLAIN, 16));
+        startButton.setFont(new Font("SansSerif", Font.PLAIN, 16));
         startButton.setAlignmentX(Component.CENTER_ALIGNMENT);
+        // startGame is the panel when clicking the button start game
         startButton.addActionListener(e -> startGame());
         add(startButton);
 
-        // Add action listeners for radio buttons
+        // allows user to pick one player or two player mode
+        // if they pick two player mode, only then will the room code panel be visible
         twoPlayerButton.addActionListener(e -> roomCodePanel.setVisible(true));
         onePlayerButton.addActionListener(e -> roomCodePanel.setVisible(false));
     }
@@ -85,27 +87,6 @@ public class WelcomeScreen extends JPanel {
     @Override
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
-    }
-
-    private void startGame() {
-        String playerName = playerNameField.getText().trim();
-        if (playerName.isEmpty()) {
-            JOptionPane.showMessageDialog(this, "Please enter a player name!");
-            return;
-        }
-
-        if (twoPlayerButton.isSelected()) {
-            String roomCode = roomCodeField.getText().trim();
-            if (roomCode.isEmpty()) {
-                JOptionPane.showMessageDialog(this, "Please enter a room code!");
-                return;
-            }
-            System.out.println("Starting 2-player game: " + playerName + " in room " + roomCode);
-        } else {
-            System.out.println("Starting 1-player game: " + playerName);
-        }
-
-        // Here you would start the actual game
     }
 
     public static void main(String[] args) {
