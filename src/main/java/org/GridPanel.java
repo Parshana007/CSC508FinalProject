@@ -3,13 +3,14 @@ package org;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.MouseEvent;
-import java.awt.event.MouseMotionListener;
+import java.awt.event.MouseListener;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
-public class GridPanel extends JPanel implements PropertyChangeListener, MouseMotionListener {
+public class GridPanel extends JPanel implements PropertyChangeListener, MouseListener {
     List<Ship> ships;
 //    List<HitMiss> guesses;
 
@@ -28,7 +29,7 @@ public class GridPanel extends JPanel implements PropertyChangeListener, MouseMo
         rows = 10;
         cols = 10;
 
-        boardShips = new Ship[rows][cols];
+        boardShips = new Ship[cols][rows];
 
         if (editMode) {
             initializeShips();
@@ -36,7 +37,7 @@ public class GridPanel extends JPanel implements PropertyChangeListener, MouseMo
 
 //        guesses = new ArrayList<>();
         this.editMode = editMode;
-        this.addMouseMotionListener(this);
+        this.addMouseListener(this);
         this.setFocusable(true);
         this.requestFocusInWindow();
     }
@@ -54,6 +55,7 @@ public class GridPanel extends JPanel implements PropertyChangeListener, MouseMo
 
         drawGrid(g);
         drawShips(g);
+        // drawGuesses(g) -- add this later to layer the guesses on top of the ships
     }
 
     private void drawGrid(Graphics g) {
@@ -105,39 +107,35 @@ public class GridPanel extends JPanel implements PropertyChangeListener, MouseMo
 
     private void drawShips(Graphics g) {
         for (Ship ship : ships) {
-//            for (Point cell : ship.getCoordinates()) {
-//                boardShips[cell.x-1][cell.y-1] = ship;
-//            }
+            for (Point cell : ship.getCoordinates()) {
+                boardShips[cell.y][cell.x] = ship;
+            }
+            drawShip(g, ship, ship == activeShip);
 
-            int shipWidth = ship.getCoordinates().get(ship.getCoordinates().size() - 1).x
-                    - ship.getCoordinates().get(0).x + 1;
-
-            int shipHeight = ship.getCoordinates().get(ship.getCoordinates().size() - 1).y
-                    - ship.getCoordinates().get(0).y + 1;
-
-            g.setColor(Color.lightGray);
-            g.fillRect(ship.getCoordinates().get(0).x * cellWidth,
-                    ship.getCoordinates().get(0).y * cellHeight,
-                    shipWidth * cellWidth,
-                    shipHeight * cellHeight);
-
-            g.setColor(Color.darkGray);
-            g.drawRect(ship.getCoordinates().get(0).x * cellWidth,
-                    ship.getCoordinates().get(0).y * cellHeight,
-                    shipWidth * cellWidth,
-                    shipHeight * cellHeight);
         }
+        System.out.println(Arrays.deepToString(boardShips));
+    }
 
+    private void drawShip(Graphics g, Ship ship, boolean selectingShip) {
+        int shipWidth = ship.getCoordinates().get(ship.getCoordinates().size() - 1).x
+                - ship.getCoordinates().get(0).x + 1;
 
-//        for (int row = 0; row < rows; row++) {
-//            for (int col = 0; col < cols; col++) {
-//                int x = col * cellWidth;
-//                int y = row * cellHeight;
-//                if (boardShips[x][y] != null) {
-//                    g.fillRect(x, y, cellWidth, cellHeight);
-//                }
-//            }
-//        }
+        int shipHeight = ship.getCoordinates().get(ship.getCoordinates().size() - 1).y
+                - ship.getCoordinates().get(0).y + 1;
+
+        Color fillColor = selectingShip ? Color.red : Color.lightGray;
+        g.setColor(fillColor);
+        g.fillRect((ship.getCoordinates().get(0).x) * cellWidth,
+                (ship.getCoordinates().get(0).y) * cellHeight,
+                shipWidth * cellWidth,
+                shipHeight * cellHeight);
+
+        Color outlineColor = selectingShip ? Color.red : Color.darkGray;
+        g.setColor(outlineColor);
+        g.drawRect((ship.getCoordinates().get(0).x) * cellWidth,
+                (ship.getCoordinates().get(0).y) * cellHeight,
+                shipWidth * cellWidth,
+                shipHeight * cellHeight);
     }
 
     @Override
@@ -150,12 +148,42 @@ public class GridPanel extends JPanel implements PropertyChangeListener, MouseMo
     }
 
     @Override
-    public void mouseDragged (MouseEvent mouseEvent) {
+    public void mouseReleased(MouseEvent e) {
+        if (!editMode) {
+            return;
+        }
+        int x = e.getX();
+        int y = e.getY();
 
+        // Determine which cell was clicked
+        int col = x / cellWidth;
+        int row = y / cellHeight;
+
+        // Bounds-check in case user clicks outside the grid
+        if (row < 0 || row >= rows || col < 0 || col >= cols) {
+            return; // clicked outside grid
+        }
+
+        System.out.println("x: " + col + ", y: " + row);
+
+        activeShip = boardShips[row][col];
+
+        repaint();
     }
 
     @Override
-    public void mouseMoved (MouseEvent mouseEvent) {
+    public void mouseClicked(MouseEvent e) {
+    }
 
+    @Override
+    public void mouseExited(MouseEvent e) {
+    }
+
+    @Override
+    public void mouseEntered(MouseEvent e) {
+    }
+
+    @Override
+    public void mousePressed(MouseEvent e) {
     }
 }

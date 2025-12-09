@@ -76,6 +76,8 @@ public class MainPanel extends JPanel implements PropertyChangeListener {
 
         outer.add(container, BorderLayout.CENTER);
         add(outer, BorderLayout.CENTER);
+
+        Blackboard.getInstance().addPropertyChangeListener(grid);
     }
 
 
