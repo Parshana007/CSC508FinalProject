@@ -1,30 +1,29 @@
 package org;
 
+import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
 
 
 public class OpponentState {
-
-    private HitMiss myHitMiss;
+    private HitMiss myHitMiss;  // my guess of opp ships
 
     public OpponentState() {
         myHitMiss = new HitMiss();
     }
 
-    public void addHit(String coordinate) {
-        this.myHitMiss.addHit(coordinate);
+    public void addHit(Point coordinate) {
+        myHitMiss.addHit(coordinate);
     }
 
-    public void addMiss(String coordinate) {
-        this.myHitMiss.addMiss(coordinate);
+    public void addMiss(Point coordinate) {
+        myHitMiss.addMiss(coordinate);
     }
 
-    public void addSunk(List<String> coordinates) {
+    public void addSunk(List<Point> coordinates) {
         Ship ship = new Ship(coordinates);
-        this.myHitMiss.addSunkShip(ship);
+        myHitMiss.addSunkShip(ship);
     }
-
 
 }
 

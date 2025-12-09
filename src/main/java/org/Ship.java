@@ -1,19 +1,20 @@
 package org;
 
+import java.awt.*;
 import java.util.List;
 
 public class Ship {
-    List<String> coordinates;
+    List<Point> coordinates;
 
-    public Ship(List<String> coordinates) {
+    public Ship(List<Point> coordinates) {
         this.coordinates = coordinates;
     }
 
-    public List<String> getCoordinates() {
+    public List<Point> getCoordinates() {
         return this.coordinates;
     }
 
-    public void setCoordinates(List<String> coordinates) {
+    public void setCoordinates(List<Point> coordinates) {
         this.coordinates = coordinates;
     }
 }

@@ -26,7 +26,7 @@ The enemy grid looks like ..., X means this and that ...
 With 1-10 on the x axis and A-J on the y axis.
 Return ONLY one coordinate in the format (x-axisy-axis).
 Do NOT write code or explanations.
-It HAS to be A-J and 1-10 inclusive.
+It HAS to be A-J and 01-10 inclusive.
 Example: A10
 """;
 

@@ -1,5 +1,6 @@
 package org;
 
+import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -7,7 +8,7 @@ import java.util.List;
 public class PlayerState {
 
     private List<Ship> myShips;
-    private HitMiss myHitMiss;
+    private HitMiss myHitMiss; //the opponents guesses of my ships
 
     public PlayerState() {
         myShips = new ArrayList<>();
@@ -19,7 +20,7 @@ public class PlayerState {
     }
 
     // Opponent guesses a coordinate player decides if hit/miss/sunk
-    public PlayerMoveResult addHitMiss(String coordinate) {
+    public PlayerMoveResult addHitMiss(Point coordinate) {
         for (Ship ship : this.myShips) {
             if (ship.getCoordinates().contains(coordinate)) {
                 this.myHitMiss.addHit(coordinate);
@@ -44,7 +45,7 @@ public class PlayerState {
         int shipSize = ship.getCoordinates().size();
         int counter = 0;
 
-        for (String hit: this.myHitMiss.getHits()) {
+        for (Point hit: this.myHitMiss.getHits()) {
             if (ship.getCoordinates().contains(hit)) {
                 counter++;
             }

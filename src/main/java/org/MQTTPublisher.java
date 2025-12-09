@@ -5,8 +5,10 @@ import org.eclipse.paho.client.mqttv3.MqttException;
 import org.eclipse.paho.client.mqttv3.MqttMessage;
 import org.eclipse.paho.client.mqttv3.persist.MemoryPersistence;
 
+import java.awt.*;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
+import java.util.stream.Collectors;
 
 public class MQTTPublisher implements PropertyChangeListener {
     private String broker = "tcp://test.mosquitto.org:1883";
@@ -35,6 +37,10 @@ public class MQTTPublisher implements PropertyChangeListener {
         this.topic = topic;
     }
 
+    private String encodePoint(Point p) {
+        return p.x + "," + p.y;
+    }
+
     @Override
     public void propertyChange(PropertyChangeEvent evt) {
         try {
@@ -42,9 +48,9 @@ public class MQTTPublisher implements PropertyChangeListener {
 
             // 1. Player is guessing a coordinate
             if (evt.getPropertyName().equals("myGuess")) {
-                String coord = (String) evt.getNewValue();
-                String msg = "GUESS:" + coord;
-                client.publish(topic, new MqttMessage(msg.getBytes()));
+                Point coord = (Point) evt.getNewValue();
+                String msg = "GUESS:" + encodePoint(coord);
+                client.publish(topic + Blackboard.getInstance().getMyPlayer(), new MqttMessage(msg.getBytes()));
             }
 
             // 2. Player responding to opponent guess
@@ -55,10 +61,13 @@ public class MQTTPublisher implements PropertyChangeListener {
 
                 // If SUNK, append all coordinates
                 if (result.getResult() == MoveResult.SUNK) {
-                    msg += ":" + String.join(",", result.getSunkShipCoords());
+                    msg += ":" + result.getSunkShipCoords()
+                            .stream()
+                            .map(this::encodePoint)
+                            .collect(Collectors.joining(";"));
                 }
 
-                client.publish(topic, new MqttMessage(msg.getBytes()));
+                client.publish(topic + Blackboard.getInstance().getMyPlayer(), new MqttMessage(msg.getBytes()));
             }
 
         } catch (Exception e) {
