@@ -2,15 +2,14 @@ package org;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseMotionListener;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 
 public class MainPanel extends JPanel implements PropertyChangeListener {
+    private ShipGridPanel myGrid;       // Your ship placement grid
+    private OpponentGridPanel oppGrid;  // Grid where you guess
 
     public MainPanel() {
-
         // Set layout first
         setLayout(new BorderLayout());
 
@@ -26,62 +25,69 @@ public class MainPanel extends JPanel implements PropertyChangeListener {
         JPanel container = new JPanel();
         container.setLayout(new BoxLayout(container, BoxLayout.X_AXIS));
 
-        ShipBankPanel shipBank = new ShipBankPanel();
-        GridPanel grid = new GridPanel(true);
 
-        // --- CREATE COLUMN LABELS (A–J) ---
-        JPanel columnLabels = new JPanel(new GridLayout(1, 10));
-        for (char c = 'A'; c <= 'J'; c++) {
-            JLabel lbl = new JLabel(String.valueOf(c), SwingConstants.CENTER);
-            lbl.setFont(new Font("SansSerif", Font.BOLD, 16));
-            columnLabels.add(lbl);
-        }
+        // Opponent Player Grid
+        oppGrid = new OpponentGridPanel();
+        JPanel oppLabeled = wrapGridWithLabels(oppGrid);
 
-        // --- CREATE ROW LABELS (1–10) ---
-        JPanel rowLabels = new JPanel(new GridLayout(10, 1));
-        for (int i = 1; i <= 10; i++) {
-            JLabel lbl = new JLabel(String.valueOf(i), SwingConstants.CENTER);
-            lbl.setFont(new Font("SansSerif", Font.BOLD, 16));
-            rowLabels.add(lbl);
-        }
+        JPanel oppWrapper = new JPanel(new BorderLayout());
+        oppWrapper.setBorder(BorderFactory.createLineBorder(new Color(139, 69, 19), 2));
+        oppWrapper.add(oppLabeled, BorderLayout.CENTER);
 
-        // --- WRAP GRID + LABELS ---
-        JPanel labeledGrid = new JPanel(new BorderLayout());
-        labeledGrid.add(columnLabels, BorderLayout.NORTH);
-        labeledGrid.add(rowLabels, BorderLayout.WEST);
-        labeledGrid.add(grid, BorderLayout.CENTER);
 
-        // Border and wrapper
-        JPanel gridWrapper = new JPanel(new BorderLayout());
-        gridWrapper.setBorder(BorderFactory.createCompoundBorder(
-                BorderFactory.createLineBorder(new Color(139, 69, 19), 2),
-                BorderFactory.createEmptyBorder(0, 0, 0, 0)
-        ));
-        gridWrapper.add(labeledGrid, BorderLayout.CENTER);
+        // My Player Grid
+        myGrid = new ShipGridPanel(true); // editMode = true → movable ships
+        JPanel myLabeled = wrapGridWithLabels(myGrid);
 
-        // Ship panel wrapper
-        JPanel shipBankWrapper = new JPanel(new BorderLayout());
-        shipBankWrapper.setBorder(BorderFactory.createCompoundBorder(
-                BorderFactory.createLineBorder(new Color(139, 69, 19), 2),
-                BorderFactory.createEmptyBorder(0, 0, 0, 0)
-        ));
-        shipBankWrapper.add(shipBank, BorderLayout.CENTER);
+        JPanel myWrapper = new JPanel(new BorderLayout());
+        myWrapper.setBorder(BorderFactory.createLineBorder(new Color(139, 69, 19), 2));
+        myWrapper.add(myLabeled, BorderLayout.CENTER);
+
 
         // Add spacing between components
         container.add(Box.createRigidArea(new Dimension(20, 0)));
-        container.add(shipBankWrapper);
+        container.add(oppWrapper);
         container.add(Box.createRigidArea(new Dimension(40, 0)));
-        container.add(gridWrapper);
+        container.add(myWrapper);
         container.add(Box.createRigidArea(new Dimension(20, 0)));
 
         outer.add(container, BorderLayout.CENTER);
         add(outer, BorderLayout.CENTER);
 
-        Blackboard.getInstance().addPropertyChangeListener(grid);
+        Blackboard.getInstance().addPropertyChangeListener(this);
+//        Blackboard.getInstance().addPropertyChangeListener(myGrid);
+//        Blackboard.getInstance().addPropertyChangeListener(oppGrid);
     }
 
+    private JPanel wrapGridWithLabels(JPanel grid) {
+        JPanel labeled = new JPanel(new BorderLayout());
+        labeled.add(createColumnLabels(), BorderLayout.NORTH);
+        labeled.add(createRowLabels(), BorderLayout.WEST);
+        labeled.add(grid, BorderLayout.CENTER);
+        return labeled;
+    }
 
+    private JPanel createColumnLabels() {
+        // --- CREATE COLUMN LABELS (A–J) ---
+        JPanel panel = new JPanel(new GridLayout(1, 10));
+        for (char c = 'A'; c <= 'J'; c++) {
+            JLabel lbl = new JLabel(String.valueOf(c), SwingConstants.CENTER);
+            lbl.setFont(new Font("SansSerif", Font.BOLD, 16));
+            panel.add(lbl);
+        }
+        return panel;
+    }
 
+    private JPanel createRowLabels() {
+        // --- CREATE ROW LABELS (1–10) ---
+        JPanel panel = new JPanel(new GridLayout(10, 1));
+        for (int i = 1; i <= 10; i++) {
+            JLabel lbl = new JLabel(String.valueOf(i), SwingConstants.CENTER);
+            lbl.setFont(new Font("SansSerif", Font.BOLD, 16));
+            panel.add(lbl);
+        }
+        return panel;
+    }
 
     @Override
     public void propertyChange(PropertyChangeEvent evt) {

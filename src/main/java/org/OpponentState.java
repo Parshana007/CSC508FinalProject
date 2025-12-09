@@ -16,13 +16,25 @@ public class OpponentState {
         myHitMiss.addHit(coordinate);
     }
 
+    public List<Point> getHits() {
+        return myHitMiss.getHits();
+    }
+
     public void addMiss(Point coordinate) {
         myHitMiss.addMiss(coordinate);
+    }
+
+    public List<Point> getMisses() {
+        return myHitMiss.getMisses();
     }
 
     public void addSunk(List<Point> coordinates) {
         Ship ship = new Ship(coordinates);
         myHitMiss.addSunkShip(ship);
+    }
+
+    public List<Ship> getSunkShips() {
+        return myHitMiss.getSunkShips();
     }
 
 }
