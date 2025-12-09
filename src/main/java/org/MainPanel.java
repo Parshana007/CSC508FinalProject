@@ -17,22 +17,49 @@ public class MainPanel extends JPanel implements PropertyChangeListener {
         // Top label
         JLabel topLabel = new JLabel("Select a ship to place", SwingConstants.CENTER);
         topLabel.setFont(new Font("SansSerif", Font.BOLD, 24));
-        topLabel.setBorder(BorderFactory.createEmptyBorder(10, 0, 10, 0)); // top/bottom padding
-        topLabel.setOpaque(true); // optional if you want background color
+        topLabel.setBorder(BorderFactory.createEmptyBorder(10, 0, 10, 0));
         add(topLabel, BorderLayout.NORTH);
 
-        // Outer container with top and bottom padding
         JPanel outer = new JPanel(new BorderLayout());
         outer.setBorder(BorderFactory.createEmptyBorder(20, 0, 20, 0));
 
-        // Inner horizontal container
         JPanel container = new JPanel();
         container.setLayout(new BoxLayout(container, BoxLayout.X_AXIS));
 
         ShipBankPanel shipBank = new ShipBankPanel();
         GridPanel grid = new GridPanel(true);
 
-        // Wrap panels with brown borders
+        // --- CREATE COLUMN LABELS (A–J) ---
+        JPanel columnLabels = new JPanel(new GridLayout(1, 10));
+        for (char c = 'A'; c <= 'J'; c++) {
+            JLabel lbl = new JLabel(String.valueOf(c), SwingConstants.CENTER);
+            lbl.setFont(new Font("SansSerif", Font.BOLD, 16));
+            columnLabels.add(lbl);
+        }
+
+        // --- CREATE ROW LABELS (1–10) ---
+        JPanel rowLabels = new JPanel(new GridLayout(10, 1));
+        for (int i = 1; i <= 10; i++) {
+            JLabel lbl = new JLabel(String.valueOf(i), SwingConstants.CENTER);
+            lbl.setFont(new Font("SansSerif", Font.BOLD, 16));
+            rowLabels.add(lbl);
+        }
+
+        // --- WRAP GRID + LABELS ---
+        JPanel labeledGrid = new JPanel(new BorderLayout());
+        labeledGrid.add(columnLabels, BorderLayout.NORTH);
+        labeledGrid.add(rowLabels, BorderLayout.WEST);
+        labeledGrid.add(grid, BorderLayout.CENTER);
+
+        // Border and wrapper
+        JPanel gridWrapper = new JPanel(new BorderLayout());
+        gridWrapper.setBorder(BorderFactory.createCompoundBorder(
+                BorderFactory.createLineBorder(new Color(139, 69, 19), 2),
+                BorderFactory.createEmptyBorder(0, 0, 0, 0)
+        ));
+        gridWrapper.add(labeledGrid, BorderLayout.CENTER);
+
+        // Ship panel wrapper
         JPanel shipBankWrapper = new JPanel(new BorderLayout());
         shipBankWrapper.setBorder(BorderFactory.createCompoundBorder(
                 BorderFactory.createLineBorder(new Color(139, 69, 19), 2),
@@ -40,24 +67,17 @@ public class MainPanel extends JPanel implements PropertyChangeListener {
         ));
         shipBankWrapper.add(shipBank, BorderLayout.CENTER);
 
-        JPanel gridWrapper = new JPanel(new BorderLayout());
-        gridWrapper.setBorder(BorderFactory.createCompoundBorder(
-                BorderFactory.createLineBorder(new Color(139, 69, 19), 2),
-                BorderFactory.createEmptyBorder(0, 0, 0, 0)
-        ));
-        gridWrapper.add(grid, BorderLayout.CENTER);
-
-        // Add spacing between and around panels
+        // Add spacing between components
         container.add(Box.createRigidArea(new Dimension(20, 0)));
         container.add(shipBankWrapper);
-        container.add(Box.createRigidArea(new Dimension(40, 0))); // brown gap could go here instead
+        container.add(Box.createRigidArea(new Dimension(40, 0)));
         container.add(gridWrapper);
         container.add(Box.createRigidArea(new Dimension(20, 0)));
 
         outer.add(container, BorderLayout.CENTER);
-
         add(outer, BorderLayout.CENTER);
     }
+
 
 
 
