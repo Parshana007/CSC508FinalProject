@@ -11,7 +11,6 @@ public class Blackboard extends PropertyChangeSupport {
     private OpponentState opponentState;
     private GameFlow gameFlow;
     private String myPlayer; //random generated String
-    private boolean gameOver = false;
     private int totalShips = 6;
 
     private Blackboard() {
