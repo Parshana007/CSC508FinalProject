@@ -11,38 +11,52 @@ import java.util.List;
 
 public class GridPanel extends JPanel implements PropertyChangeListener, MouseMotionListener {
     List<Ship> ships;
-    List<HitMiss> guesses;
+//    List<HitMiss> guesses;
+
+    // 2D matrix to represent the board - each cell will either reference a ship or null if no ship is placed there
+    Ship[][] boardShips;
+
+    int cellWidth, cellHeight;
+    int rows, cols;
     // if in edit mode, moving the mouse will move the ship being placed (activeShip)
     boolean editMode;
     Ship activeShip;
 
     public GridPanel(boolean editMode) {
-        ships = new ArrayList<>();
-        guesses = new ArrayList<>();
+        setBackground(Color.blue);
+
+        rows = 10;
+        cols = 10;
+
+        boardShips = new Ship[rows][cols];
+
+        if (editMode) {
+            initializeShips();
+        }
+
+//        guesses = new ArrayList<>();
         this.editMode = editMode;
         this.addMouseMotionListener(this);
-        setBackground(Color.blue);
         this.setFocusable(true);
         this.requestFocusInWindow();
     }
 
     public void addGuess(HitMiss guess) {
-        this.guesses.add(guess);
-        // draw the guess
+        // draw the guess by coloring in the cell
     }
 
     @Override
     protected void paintComponent(java.awt.Graphics g) {
         super.paintComponent(g);
+
+        cellWidth = getWidth() / cols;
+        cellHeight = getHeight() / rows;
+
         drawGrid(g);
+        drawShips(g);
     }
 
     private void drawGrid(Graphics g) {
-        int rows = 10;
-        int cols = 10;
-
-        int cellWidth = getWidth() / cols;
-        int cellHeight = getHeight() / rows;
 
         g.setColor(Color.DARK_GRAY);
 
@@ -53,6 +67,77 @@ public class GridPanel extends JPanel implements PropertyChangeListener, MouseMo
                 g.drawRect(x, y, cellWidth, cellHeight);
             }
         }
+    }
+
+    private void initializeShips() {
+        ships = new ArrayList<>();
+
+        List<Point> ship1Points = new ArrayList<>();
+        ship1Points.add(new Point(1, 1));
+        ship1Points.add(new Point(2, 1));
+        ship1Points.add(new Point(3, 1));
+        ship1Points.add(new Point(4, 1));
+        ship1Points.add(new Point(5, 1));
+        ships.add(new Ship(ship1Points));
+
+        List<Point> ship2Points = new ArrayList<>();
+        ship2Points.add(new Point(2, 3));
+        ship2Points.add(new Point(2, 4));
+        ship2Points.add(new Point(2, 5));
+        ship2Points.add(new Point(2, 6));
+        ships.add(new Ship(ship2Points));
+
+        List<Point> ship3Points = new ArrayList<>();
+        ship3Points.add(new Point(4, 3));
+        ship3Points.add(new Point(5, 3));
+        ship3Points.add(new Point(6, 3));
+        ships.add(new Ship(ship3Points));
+
+        List<Point> ship4Points = new ArrayList<>();
+        ship4Points.add(new Point(7, 5));
+        ship4Points.add(new Point(7, 6));
+        ships.add(new Ship(ship4Points));
+
+        List<Point> ship5Points = new ArrayList<>();
+        ship5Points.add(new Point(5, 5));
+        ships.add(new Ship(ship5Points));
+    }
+
+    private void drawShips(Graphics g) {
+        for (Ship ship : ships) {
+//            for (Point cell : ship.getCoordinates()) {
+//                boardShips[cell.x-1][cell.y-1] = ship;
+//            }
+
+            int shipWidth = ship.getCoordinates().get(ship.getCoordinates().size() - 1).x
+                    - ship.getCoordinates().get(0).x + 1;
+
+            int shipHeight = ship.getCoordinates().get(ship.getCoordinates().size() - 1).y
+                    - ship.getCoordinates().get(0).y + 1;
+
+            g.setColor(Color.lightGray);
+            g.fillRect(ship.getCoordinates().get(0).x * cellWidth,
+                    ship.getCoordinates().get(0).y * cellHeight,
+                    shipWidth * cellWidth,
+                    shipHeight * cellHeight);
+
+            g.setColor(Color.darkGray);
+            g.drawRect(ship.getCoordinates().get(0).x * cellWidth,
+                    ship.getCoordinates().get(0).y * cellHeight,
+                    shipWidth * cellWidth,
+                    shipHeight * cellHeight);
+        }
+
+
+//        for (int row = 0; row < rows; row++) {
+//            for (int col = 0; col < cols; col++) {
+//                int x = col * cellWidth;
+//                int y = row * cellHeight;
+//                if (boardShips[x][y] != null) {
+//                    g.fillRect(x, y, cellWidth, cellHeight);
+//                }
+//            }
+//        }
     }
 
     @Override
