@@ -2,6 +2,7 @@ package org;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.beans.PropertyChangeEvent;
@@ -29,14 +30,13 @@ public class GridPanel extends JPanel implements PropertyChangeListener, MouseLi
         rows = 10;
         cols = 10;
 
-        boardShips = new Ship[cols][rows];
-
         if (editMode) {
             initializeShips();
         }
 
 //        guesses = new ArrayList<>();
         this.editMode = editMode;
+        setupKeyBindings();
         this.addMouseListener(this);
         this.setFocusable(true);
         this.requestFocusInWindow();
@@ -106,6 +106,7 @@ public class GridPanel extends JPanel implements PropertyChangeListener, MouseLi
     }
 
     private void drawShips(Graphics g) {
+        boardShips = new Ship[rows][cols];
         for (Ship ship : ships) {
             for (Point cell : ship.getCoordinates()) {
                 boardShips[cell.y][cell.x] = ship;
@@ -113,7 +114,6 @@ public class GridPanel extends JPanel implements PropertyChangeListener, MouseLi
             drawShip(g, ship, ship == activeShip);
 
         }
-        System.out.println(Arrays.deepToString(boardShips));
     }
 
     private void drawShip(Graphics g, Ship ship, boolean selectingShip) {
@@ -137,6 +137,22 @@ public class GridPanel extends JPanel implements PropertyChangeListener, MouseLi
                 shipWidth * cellWidth,
                 shipHeight * cellHeight);
     }
+
+    private void setupKeyBindings() {
+        InputMap input = getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW);
+        ActionMap actions = getActionMap();
+
+        input.put(KeyStroke.getKeyStroke("LEFT"),  "moveLeft");
+        input.put(KeyStroke.getKeyStroke("RIGHT"), "moveRight");
+        input.put(KeyStroke.getKeyStroke("UP"),    "moveUp");
+        input.put(KeyStroke.getKeyStroke("DOWN"),  "moveDown");
+
+        actions.put("moveLeft",  new MoveShipAction(-1, 0));
+        actions.put("moveRight", new MoveShipAction(1, 0));
+        actions.put("moveUp",    new MoveShipAction(0, -1));
+        actions.put("moveDown",  new MoveShipAction(0, 1));
+    }
+
 
     @Override
     public void propertyChange(PropertyChangeEvent evt) {
@@ -164,8 +180,6 @@ public class GridPanel extends JPanel implements PropertyChangeListener, MouseLi
             return; // clicked outside grid
         }
 
-        System.out.println("x: " + col + ", y: " + row);
-
         activeShip = boardShips[row][col];
 
         repaint();
@@ -186,4 +200,48 @@ public class GridPanel extends JPanel implements PropertyChangeListener, MouseLi
     @Override
     public void mousePressed(MouseEvent e) {
     }
+
+    private class MoveShipAction extends AbstractAction {
+        int dx, dy;
+
+        MoveShipAction(int dx, int dy) {
+            this.dx = dx;
+            this.dy = dy;
+        }
+
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            if (!editMode || activeShip == null)
+                return;  // ignore keys unless in edit mode AND a ship is selected
+
+            moveActiveShip(dx, dy);
+        }
+
+        private void moveActiveShip(int dx, int dy) {
+            if (activeShip == null) return;
+
+            List<Point> newCoords = new ArrayList<>();
+            for (Point coord : activeShip.getCoordinates()) {
+                int newX = coord.x + dx;
+                int newY = coord.y + dy;
+
+                if (!canPlaceShip(newX, newY)) {
+                    return; // if any cell is invalid, cancel move
+                }
+
+                newCoords.add(new Point(newX, newY));
+            }
+
+            // move is valid: update coordinates
+            activeShip.setCoordinates(newCoords);
+
+            repaint();
+        }
+
+        private boolean canPlaceShip(int newX, int newY) {
+            return newY >= 0 && newY < rows && newX >= 0 && newX < cols
+                    && (boardShips[newY][newX] == activeShip || boardShips[newY][newX] == null);
+        }
+    }
+
 }
