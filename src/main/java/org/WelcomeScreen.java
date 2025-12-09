@@ -94,7 +94,6 @@ public class WelcomeScreen extends JPanel {
 //                Blackboard.setValue("mode", "twoPlayer");
             System.out.println(roomCode);
             Blackboard.getInstance().getGameFlow().setPhase(Phase.WAITFOROPPONENTROOMID);
-            Blackboard.getInstance().firePropertyChange("phase", null, Phase.WAITFOROPPONENTROOMID);
 
 //            } else {
 ////                Blackboard.setValue("mode", "onePlayer");

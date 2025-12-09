@@ -19,6 +19,7 @@ public class GameFlow {
 
     public void setPhase(Phase phase) {
         this.phase = phase;
+        Blackboard.getInstance().firePropertyChange("phase", null, this.phase);
     }
 
     public Phase getPhase() {
