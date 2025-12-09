@@ -81,22 +81,24 @@ public class WelcomeScreen extends JPanel {
 //        startButton.addActionListener(e -> startGame());
 
         // TODO REVIEW
+        // when start button is clicked
         startButton.addActionListener(e -> {
             String playerName = playerNameField.getText();
-
-//            Blackboard.setValue("playerName", playerName);
+//            Blackboard.getInstance().getGameFlow. ("playerName", playerName);
             System.out.println(playerName);
 
 
-            if (twoPlayerButton.isSelected()) {
-                String roomCode = roomCodeField.getText();
-//                Blackboard.setValue("roomCode", roomCode);
+//            if (twoPlayerButton.isSelected()) {
+            String roomCode = roomCodeField.getText();
+            Blackboard.getInstance().getGameFlow().setRoomID(roomCode);
 //                Blackboard.setValue("mode", "twoPlayer");
-                System.out.println(roomCode);
+            System.out.println(roomCode);
+            Blackboard.getInstance().getGameFlow().setPhase(Phase.WAITFOROPPONENTROOMID);
+            Blackboard.getInstance().firePropertyChange("phase", null, Phase.WAITFOROPPONENTROOMID);
 
-            } else {
-//                Blackboard.setValue("mode", "onePlayer");
-            }
+//            } else {
+////                Blackboard.setValue("mode", "onePlayer");
+//            }
 
 //            Blackboard.setValue("screen", "mainPanel");
         });

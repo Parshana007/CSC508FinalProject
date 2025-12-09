@@ -11,6 +11,8 @@ public class Blackboard extends PropertyChangeSupport {
     private OpponentState opponentState;
     private GameFlow gameFlow;
     private String myPlayer; //random generated String
+    private boolean gameOver = false;
+    private int totalShips = 6;
 
     private Blackboard() {
         super(new Object());
@@ -31,6 +33,10 @@ public class Blackboard extends PropertyChangeSupport {
         return myPlayer;
     }
 
+    public int getTotalShips() {
+        return totalShips;
+    }
+
 //    public void setMyPlayer(String myPlayer) {
 //        this.myPlayer = myPlayer;
 //    }
@@ -43,10 +49,16 @@ public class Blackboard extends PropertyChangeSupport {
         firePropertyChange("myGuess", null, coordinate);
     }
 
+
     public void checkOppGuess(Point coordinate) {
         PlayerMoveResult result = this.playerState.addHitMiss(coordinate);
 
         firePropertyChange("guessResult", null, result);
+        // Check if I lost
+        if (this.playerState.allShipsSunk()) {
+            this.gameFlow.setPhase(Phase.LOSTGAME);
+            firePropertyChange("phase", null, Phase.LOSTGAME);
+        }
     }
 
     public void addMyGuessResult(MoveResult result, Point coordinate, List<Point> sunkCoords) {
@@ -55,6 +67,14 @@ public class Blackboard extends PropertyChangeSupport {
             case MISS -> this.opponentState.addMiss(coordinate);
             case SUNK -> this.opponentState.addSunk(sunkCoords);
         }
+
+        // Check if I won
+        if (this.opponentState.allShipsSunk()) {
+//            firePropertyChange("gameOver", null, "me");
+            this.gameFlow.setPhase(Phase.WONGAME);
+            firePropertyChange("phase", null, Phase.WONGAME);
+        }
+
     }
 
 

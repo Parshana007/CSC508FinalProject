@@ -6,5 +6,7 @@ public enum Phase {
     WAITFOROPPONENTROOMID,
     // waiting to enter room code opp, waiting for placement opp, waiting for guess opp
     WAITFOROPPONENTPLACEMENT,
-    WAITFOROPPONENTGUESS
+    WAITFOROPPONENTGUESS,
+    WONGAME,
+    LOSTGAME
 }

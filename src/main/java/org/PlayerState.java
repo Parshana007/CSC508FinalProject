@@ -58,4 +58,9 @@ public class PlayerState {
         return MoveResult.HIT;
     }
 
+    //TODO check if myships is the total amount of ships placed
+    public boolean allShipsSunk() {
+        return this.myHitMiss.getSunkShips().size() == Blackboard.getInstance().getTotalShips();
+    }
+
 }

@@ -37,5 +37,11 @@ public class OpponentState {
         return myHitMiss.getSunkShips();
     }
 
+    public boolean allShipsSunk() {
+        return this.myHitMiss.getSunkShips().size() == Blackboard.getInstance().getTotalShips();
+    }
+
+
+
 }
 
