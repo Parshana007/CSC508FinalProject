@@ -5,7 +5,8 @@ import java.awt.*;
 
 public class Main extends JFrame {
     public Main() {
-        MainPanel mainPanel = new MainPanel();
+//        MainPanel mainPanel = new MainPanel();
+        GamePanel mainPanel = new GamePanel();
         this.add(mainPanel);
 
         Blackboard.getInstance().addPropertyChangeListener(mainPanel);

@@ -35,10 +35,6 @@ public class Blackboard extends PropertyChangeSupport {
 //        this.myPlayer = myPlayer;
 //    }
 
-    public PlayerState getPlayerState() {
-        return playerState;
-    }
-
     public void addMyGuess(Point coordinate) {
         firePropertyChange("myGuess", null, coordinate);
     }
@@ -55,8 +51,11 @@ public class Blackboard extends PropertyChangeSupport {
             case MISS -> this.opponentState.addMiss(coordinate);
             case SUNK -> this.opponentState.addSunk(sunkCoords);
         }
+
+        firePropertyChange("UIGuessResult", null, result);
     }
 
+    public PlayerState getPlayerState() { return playerState; }
 
     public OpponentState getOpponentState() {
         return opponentState;

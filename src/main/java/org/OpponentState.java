@@ -25,5 +25,18 @@ public class OpponentState {
         myHitMiss.addSunkShip(ship);
     }
 
+    public List<Point> getHits() {
+        return myHitMiss.getHits();
+
+    }
+
+    public List<Point> getMiss() {
+        return myHitMiss.getMisses();
+    }
+
+    public List<Ship> getSunk() {
+        return myHitMiss.getSunkShips();
+    }
+
 }
 
