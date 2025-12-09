@@ -12,13 +12,15 @@ public class ScreenManager extends JPanel implements PropertyChangeListener {
     // identifiers
 //    private static final String ROOM = "ROOM";
 //    private static final String WAIT = "WAIT";
-//    private static final String PLACE = "PLACE";
+    private static final String PLACE = "PLACE";
     private static final String WON = "WON";
     private static final String LOST = "LOST";
     private static final String WELCOMESCREEN = "WELCOMESCREEN";
+    private static final String GAME = "GAME";
 
 
     public ScreenManager() {
+        Blackboard.getInstance().addPropertyChangeListener(this);
         setLayout(layout);
 
         // Add screens
@@ -28,8 +30,8 @@ public class ScreenManager extends JPanel implements PropertyChangeListener {
 
 //        add(new RoomScreen(), ROOM);
 //        add(new WaitingScreen("Waiting for other player to join..."), WAIT);
-//        add(new PlacementScreen(), PLACE);
-//        add(new GameScreen(), GAME);
+        add(new PlacementScreen(), PLACE);
+        add(new GameScreen(), GAME);
 
         // which screen to start with
         layout.show(this, WELCOMESCREEN);
@@ -46,7 +48,7 @@ public class ScreenManager extends JPanel implements PropertyChangeListener {
             case LOSTGAME -> layout.show(this, LOST);
 
 //            case WAITFOROPPONENTROOMID -> layout.show(this, WAIT);
-//            case PLACEMENT -> layout.show(this, PLACE);
+            case PLACEMENT -> layout.show(this, PLACE);
 //            case WAITFOROPPONENTPLACEMENT ->
 //                    layout.show(this, WAIT); // reuse waiting screen
 //            case GUESSING -> layout.show(this, GAME);

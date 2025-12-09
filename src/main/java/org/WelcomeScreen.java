@@ -84,20 +84,24 @@ public class WelcomeScreen extends JPanel {
         // when start button is clicked
         startButton.addActionListener(e -> {
             String playerName = playerNameField.getText();
-//            Blackboard.getInstance().getGameFlow. ("playerName", playerName);
+            Blackboard.getInstance().setMyPlayer(playerName);
             System.out.println(playerName);
 
+            if (twoPlayerButton.isSelected()) {
+                String roomCode = roomCodeField.getText();
+                Blackboard.getInstance().setRoomID(roomCode);
+                System.out.println(roomCode);
 
-//            if (twoPlayerButton.isSelected()) {
-            String roomCode = roomCodeField.getText();
-            Blackboard.getInstance().getGameFlow().setRoomID(roomCode);
-//                Blackboard.setValue("mode", "twoPlayer");
-            System.out.println(roomCode);
-            Blackboard.getInstance().getGameFlow().setPhase(Phase.WAITFOROPPONENTROOMID);
-
-//            } else {
-////                Blackboard.setValue("mode", "onePlayer");
-//            }
+                if (Blackboard.getInstance().getGameFlow().isOpponentReady()) {
+                    Blackboard.getInstance().getGameFlow().setPhase(Phase.PLACEMENT);
+                } else {
+                    Blackboard.getInstance().getGameFlow().setPhase(Phase.WAITFOROPPONENTROOMID);
+                }
+            } else {
+                Blackboard.getInstance().setRoomID(null);
+                Blackboard.getInstance().getGameFlow().setPhase(Phase.PLACEMENT);
+                // tell the AI to place their ships?
+            }
 
 //            Blackboard.setValue("screen", "mainPanel");
         });

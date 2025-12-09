@@ -35,6 +35,8 @@ public class MQTTSubscriber implements MqttCallback {
                 } else {
                     Blackboard.getInstance().addMyGuessResult(result, decodePoint(parts[2]), List.of());
                 }
+            } else if (parts[0].equals("SHIPS_PLACED")) {
+                Blackboard.getInstance().getGameFlow().setOpponentReady(true);
             }
         }
     }

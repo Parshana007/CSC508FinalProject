@@ -11,6 +11,7 @@ public class Blackboard extends PropertyChangeSupport {
     private OpponentState opponentState;
     private GameFlow gameFlow;
     private String myPlayer; //random generated String
+    private String roomID;
     private int totalShips = 6;
 
     private Blackboard() {
@@ -36,9 +37,9 @@ public class Blackboard extends PropertyChangeSupport {
         return totalShips;
     }
 
-//    public void setMyPlayer(String myPlayer) {
-//        this.myPlayer = myPlayer;
-//    }
+    public void setMyPlayer(String myPlayer) {
+        this.myPlayer = myPlayer;
+    }
 
     public PlayerState getPlayerState() {
         return playerState;
@@ -83,6 +84,14 @@ public class Blackboard extends PropertyChangeSupport {
 
     public GameFlow getGameFlow() {
         return gameFlow;
+    }
+
+    public void setRoomID(String roomID) {
+        this.roomID = roomID;
+    }
+
+    public String getRoomID() {
+        return roomID;
     }
 
 }

@@ -5,11 +5,11 @@ import java.awt.*;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 
-public class MainPanel extends JPanel implements PropertyChangeListener {
+public class PlacementScreen extends JPanel implements PropertyChangeListener {
     private ShipGridPanel myGrid;       // Your ship placement grid
-    private OpponentGridPanel oppGrid;  // Grid where you guess
+    private RulesPanel rulesPanel;
 
-    public MainPanel() {
+    public PlacementScreen() {
         // Set layout first
         setLayout(new BorderLayout());
 
@@ -26,13 +26,10 @@ public class MainPanel extends JPanel implements PropertyChangeListener {
         container.setLayout(new BoxLayout(container, BoxLayout.X_AXIS));
 
 
-        // Opponent Player Grid
-        oppGrid = new OpponentGridPanel();
-        JPanel oppLabeled = wrapGridWithLabels(oppGrid);
-
-        JPanel oppWrapper = new JPanel(new BorderLayout());
-        oppWrapper.setBorder(BorderFactory.createLineBorder(new Color(139, 69, 19), 2));
-        oppWrapper.add(oppLabeled, BorderLayout.CENTER);
+        // Rules Panel
+        rulesPanel = new RulesPanel();
+        JPanel rulesWrapper = new JPanel(new BorderLayout());
+        rulesWrapper.setBorder(BorderFactory.createLineBorder(new Color(139, 69, 19), 2));
 
 
         // My Player Grid
@@ -46,7 +43,7 @@ public class MainPanel extends JPanel implements PropertyChangeListener {
 
         // Add spacing between components
         container.add(Box.createRigidArea(new Dimension(20, 0)));
-        container.add(oppWrapper);
+        container.add(rulesWrapper);
         container.add(Box.createRigidArea(new Dimension(40, 0)));
         container.add(myWrapper);
         container.add(Box.createRigidArea(new Dimension(20, 0)));
@@ -56,7 +53,6 @@ public class MainPanel extends JPanel implements PropertyChangeListener {
 
         Blackboard.getInstance().addPropertyChangeListener(this);
         Blackboard.getInstance().addPropertyChangeListener(myGrid);
-        Blackboard.getInstance().addPropertyChangeListener(oppGrid);
     }
 
     private JPanel wrapGridWithLabels(JPanel grid) {

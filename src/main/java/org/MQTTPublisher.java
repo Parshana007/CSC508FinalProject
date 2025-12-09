@@ -50,6 +50,7 @@ public class MQTTPublisher implements PropertyChangeListener {
             if (evt.getPropertyName().equals("myGuess")) {
                 Point coord = (Point) evt.getNewValue();
                 String msg = "GUESS:" + encodePoint(coord);
+                // TODO: HERE WE NEED TOPIC TO CONTAIN THE ROOM CODE IN THE BLACKBOARD
                 client.publish(topic + Blackboard.getInstance().getMyPlayer(), new MqttMessage(msg.getBytes()));
             }
 
@@ -67,6 +68,12 @@ public class MQTTPublisher implements PropertyChangeListener {
                             .collect(Collectors.joining(";"));
                 }
 
+                client.publish(topic + Blackboard.getInstance().getMyPlayer(), new MqttMessage(msg.getBytes()));
+            }
+
+            // 3. Player has finished placing their ships
+            else if (evt.getPropertyName().equals("shipsPlaced")) {
+                String msg = "SHIPS_PLACED";
                 client.publish(topic + Blackboard.getInstance().getMyPlayer(), new MqttMessage(msg.getBytes()));
             }
 

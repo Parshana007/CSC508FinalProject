@@ -1,20 +1,12 @@
 package org;
 
 public class GameFlow {
-    private String roomID;
     private Phase phase;
     private String turn; // ME or OPP
+    private boolean opponentReady = false;
 
     public GameFlow() {
 
-    }
-
-    public void setRoomID(String roomID) {
-        this.roomID = roomID;
-    }
-
-    public String getRoomID() {
-        return roomID;
     }
 
     public void setPhase(Phase phase) {
@@ -32,6 +24,14 @@ public class GameFlow {
 
     public String getTurn() {
         return turn;
+    }
+
+    public void setOpponentReady(boolean opponentReady) {
+        this.opponentReady = opponentReady;
+    }
+
+    public boolean isOpponentReady() {
+        return opponentReady;
     }
 
 }
