@@ -43,6 +43,10 @@ public class GridPanel extends JPanel implements MouseListener {
         return new Point(x / cellWidth, y / cellHeight);
     }
 
+    protected Point toCoordinate(int x, int y) {
+        return new Point(x * cellWidth, y * cellHeight);
+    }
+
     @Override
     public void mouseClicked(MouseEvent e) {
 

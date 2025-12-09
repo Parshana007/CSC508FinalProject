@@ -55,8 +55,8 @@ public class MainPanel extends JPanel implements PropertyChangeListener {
         add(outer, BorderLayout.CENTER);
 
         Blackboard.getInstance().addPropertyChangeListener(this);
-//        Blackboard.getInstance().addPropertyChangeListener(myGrid);
-//        Blackboard.getInstance().addPropertyChangeListener(oppGrid);
+        Blackboard.getInstance().addPropertyChangeListener(myGrid);
+        Blackboard.getInstance().addPropertyChangeListener(oppGrid);
     }
 
     private JPanel wrapGridWithLabels(JPanel grid) {

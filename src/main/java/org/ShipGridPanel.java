@@ -3,11 +3,14 @@ package org;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ShipGridPanel extends GridPanel {
+public class ShipGridPanel extends GridPanel implements PropertyChangeListener {
 
     private List<Ship> ships = new ArrayList<>();
     private Ship[][] boardShips;
@@ -52,10 +55,11 @@ public class ShipGridPanel extends GridPanel {
         int height = (maxY - minY + 1) * cellHeight;
 
         g.setColor(active ? Color.RED : Color.LIGHT_GRAY);
-        g.fillRect(minX * cellWidth, minY * cellHeight, width, height);
+//        g.fillRect(minX * cellWidth, minY * cellHeight, width, height);
+        g.fillRect((minX - 1) * cellWidth, (minY - 1) * cellHeight, width, height);
 
-        g.setColor(active ? Color.RED : Color.DARK_GRAY);
-        g.drawRect(minX * cellWidth, minY * cellHeight, width, height);
+//        g.setColor(active ? Color.RED : Color.DARK_GRAY);
+//        g.drawRect(minX * cellWidth, minY * cellHeight, width, height);
     }
 
     private void initializeShips() {
@@ -102,7 +106,10 @@ public class ShipGridPanel extends GridPanel {
         if (grid.x < 0 || grid.x >= cols || grid.y < 0 || grid.y >= rows)
             return;
 
-        activeShip = boardShips[grid.y][grid.x];
+        int logicalX = grid.x + 1;
+        int logicalY = grid.y + 1;
+
+        activeShip = boardShips[logicalY][logicalX];
         repaint();
     }
 
@@ -119,6 +126,15 @@ public class ShipGridPanel extends GridPanel {
         actions.put("moveRight", new MoveShipAction(1, 0));
         actions.put("moveUp",    new MoveShipAction(0, -1));
         actions.put("moveDown",  new MoveShipAction(0, 1));
+    }
+
+    @Override
+    public void propertyChange(PropertyChangeEvent evt) {
+        if (SwingUtilities.isEventDispatchThread()) {
+            repaint();
+        } else {
+            SwingUtilities.invokeLater(this::repaint);
+        }
     }
 
     private class MoveShipAction extends AbstractAction {
