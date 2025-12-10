@@ -42,16 +42,41 @@ public class ScreenManager extends JPanel implements PropertyChangeListener {
         if (!"phase".equals(evt.getPropertyName())) return;
 
         Phase newPhase = (Phase) evt.getNewValue();
-
+        
         switch (newPhase) {
             case WONGAME -> layout.show(this, WON);
             case LOSTGAME -> layout.show(this, LOST);
 
-//            case WAITFOROPPONENTROOMID -> layout.show(this, WAIT);
-            case PLACEMENT -> layout.show(this, PLACE);
+            case WAITFOROPPONENTROOMID -> showWaitingPopup();
+//            case PLACEMENT -> layout.show(this, PLACE);
+            case PLACEMENT -> {
+                layout.show(this, PLACE);
+                if (waitingDialog != null) {
+                    waitingDialog.dispose();
+                    waitingDialog = null;
+                }
+            }
 //            case WAITFOROPPONENTPLACEMENT ->
 //                    layout.show(this, WAIT); // reuse waiting screen
 //            case GUESSING -> layout.show(this, GAME);
         }
     }
+
+    private JDialog waitingDialog;
+
+    private void showWaitingPopup() {
+        // Only create if not already open
+        if (waitingDialog != null && waitingDialog.isShowing()) return;
+
+        JFrame mainFrame = (JFrame) SwingUtilities.getWindowAncestor(this);
+
+        waitingDialog = new JDialog(mainFrame, "Waiting", true);
+        waitingDialog.add(new JLabel("Waiting for opponent...", SwingConstants.CENTER));
+        waitingDialog.setSize(300, 150);
+        waitingDialog.setLocationRelativeTo(mainFrame);
+
+        // Show popup (on EDT)
+        SwingUtilities.invokeLater(() -> waitingDialog.setVisible(true));
+    }
+
 }

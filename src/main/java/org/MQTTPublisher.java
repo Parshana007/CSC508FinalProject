@@ -45,8 +45,17 @@ public class MQTTPublisher implements PropertyChangeListener {
         try {
             if (!client.isConnected()) return;
 
+            if (evt.getPropertyName().equals("roomJoined")) {
+                String msg = "JOINED_ROOM";
+//                System.out.println("PUBLISH TO: " + Blackboard.getInstance().getFullTopic());
+                // retains past messages
+                MqttMessage mqttMessage = new MqttMessage(msg.getBytes());
+                mqttMessage.setRetained(true);
+                client.publish(Blackboard.getInstance().getFullTopic(), mqttMessage);
+            }
+
             // 1. Player is guessing a coordinate
-            if (evt.getPropertyName().equals("myGuess")) {
+            else if (evt.getPropertyName().equals("myGuess")) {
                 Point coord = (Point) evt.getNewValue();
                 String msg = "GUESS:" + encodePoint(coord);
                 client.publish(Blackboard.getInstance().getFullTopic(), new MqttMessage(msg.getBytes()));

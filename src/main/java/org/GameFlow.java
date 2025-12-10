@@ -28,6 +28,7 @@ public class GameFlow {
 
     public void setOpponentReady(boolean opponentReady) {
         this.opponentReady = opponentReady;
+//        this.setPhase(Phase.PLACEMENT);
     }
 
     public boolean isOpponentReady() {

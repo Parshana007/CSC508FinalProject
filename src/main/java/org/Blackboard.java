@@ -90,6 +90,7 @@ public class Blackboard extends PropertyChangeSupport {
 
     public void setRoomID(String roomID) {
         this.roomID = roomID;
+        Blackboard.getInstance().firePropertyChange("roomID", null, roomID);
     }
 
     public String getRoomID() {
@@ -113,7 +114,7 @@ public class Blackboard extends PropertyChangeSupport {
     }
 
     public String getFullTopic() {
-        return topic + roomID;
+        return topic + roomID + "/" + myPlayer;
     }
 
 }

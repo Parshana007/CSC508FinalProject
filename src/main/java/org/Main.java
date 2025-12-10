@@ -8,7 +8,6 @@ public class Main extends JFrame {
     public Main() {
         ScreenManager screens = new ScreenManager();
         add(screens);
-
         Blackboard.getInstance().addPropertyChangeListener(screens);
     }
 
@@ -25,6 +24,8 @@ public class Main extends JFrame {
         MQTTPublisher publisher = new MQTTPublisher();
         Blackboard.getInstance().addPropertyChangeListener(publisher);
         MQTTSubscriber subscriber = new MQTTSubscriber();
+        Blackboard.getInstance().addPropertyChangeListener(subscriber);
+
     }
 }
 //
