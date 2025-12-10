@@ -6,19 +6,21 @@ import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 
 public class GameScreen extends JPanel implements PropertyChangeListener {
-    private ShipGridPanel myGrid;       // Your ship placement grid
-    private OpponentGridPanel oppGrid;  // Grid where you guess
 
     public GameScreen() {
         // Set layout first
         setLayout(new BorderLayout());
 
-        // Top label
-        JLabel topLabel = new JLabel("Select a ship to place", SwingConstants.CENTER);
-        topLabel.setFont(new Font("SansSerif", Font.BOLD, 24));
-        topLabel.setBorder(BorderFactory.createEmptyBorder(10, 0, 10, 0));
-        add(topLabel, BorderLayout.NORTH);
+        // Submit button
+        JButton submitButton = new JButton("Submit Guess");
+        submitButton.setFont(new Font("SansSerif", Font.BOLD, 20));
+        submitButton.setPreferredSize(new Dimension(200, 50)); // Optional
+        submitButton.addActionListener(e -> {
+            // TODO: handle guess logic
+        });
+        add(submitButton, BorderLayout.SOUTH);
 
+        // --- Main content layout ---
         JPanel outer = new JPanel(new BorderLayout());
         outer.setBorder(BorderFactory.createEmptyBorder(20, 0, 20, 0));
 
@@ -27,7 +29,7 @@ public class GameScreen extends JPanel implements PropertyChangeListener {
 
 
         // Opponent Player Grid
-        oppGrid = new OpponentGridPanel();
+        OpponentGridPanel oppGrid = new OpponentGridPanel();
         JPanel oppLabeled = wrapGridWithLabels(oppGrid);
 
         JPanel oppWrapper = new JPanel(new BorderLayout());
@@ -36,7 +38,7 @@ public class GameScreen extends JPanel implements PropertyChangeListener {
 
 
         // My Player Grid
-        myGrid = new ShipGridPanel(true); // editMode = true → movable ships
+        ShipGridPanel myGrid = new ShipGridPanel(true);
         JPanel myLabeled = wrapGridWithLabels(myGrid);
 
         JPanel myWrapper = new JPanel(new BorderLayout());

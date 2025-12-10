@@ -3,7 +3,8 @@ package org;
 public class GameFlow {
     private Phase phase;
     private String turn; // ME or OPP
-    private boolean opponentReady = false;
+    private boolean opponentReadyRoom = false;
+    private boolean opponentReadyPlacement = false;
 
     public GameFlow() {
 
@@ -26,13 +27,21 @@ public class GameFlow {
         return turn;
     }
 
-    public void setOpponentReady(boolean opponentReady) {
-        this.opponentReady = opponentReady;
+    public void setOpponentReadyRoom(boolean opponentReadyRoom) {
+        this.opponentReadyRoom = opponentReadyRoom;
 //        this.setPhase(Phase.PLACEMENT);
     }
 
-    public boolean isOpponentReady() {
-        return opponentReady;
+    public boolean isOpponentReadyRoom() {
+        return opponentReadyRoom;
+    }
+
+    public void setOpponentReadyPlacement(boolean opponentReadyPlacement) {
+        this.opponentReadyPlacement = opponentReadyPlacement;
+    }
+
+    public boolean isOpponentReadyPlacement() {
+        return opponentReadyPlacement;
     }
 
 }

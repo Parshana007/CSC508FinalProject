@@ -9,7 +9,6 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
 import java.beans.PropertyChangeEvent;
-import java.beans.PropertyChangeListener;
 
 public class MQTTSubscriber implements MqttCallback, PropertyChangeListener {
     private String CLIENT_ID = "brokerverse-subscriber-";
@@ -116,12 +115,15 @@ public class MQTTSubscriber implements MqttCallback, PropertyChangeListener {
                     Blackboard.getInstance().addMyGuessResult(result, decodePoint(parts[2]), List.of());
                 }
             } else if (parts[0].equals("SHIPS_PLACED")) {
-                Blackboard.getInstance().getGameFlow().setOpponentReady(true);
+                Blackboard.getInstance().getGameFlow().setOpponentReadyPlacement(true);
+                if (Blackboard.getInstance().getGameFlow().getPhase().equals(Phase.WAITFOROPPONENTPLACEMENT)) {
+                    Blackboard.getInstance().getGameFlow().setPhase(Phase.GUESSING);
+                }
             }
             else if (parts[0].equals("JOINED_ROOM")) {
 //                System.out.println("SUBSCRIBED TO: " + Blackboard.getInstance().getRoomID() + "/#");
 //                System.out.println("TOPIC = " + topic + ", PAYLOAD = " + payload);
-                Blackboard.getInstance().getGameFlow().setOpponentReady(true);
+                Blackboard.getInstance().getGameFlow().setOpponentReadyRoom(true);
                 Blackboard.getInstance().getGameFlow().setPhase(Phase.PLACEMENT);
                 System.out.println("Changed to phase: " + Blackboard.getInstance().getGameFlow().getPhase());
 //                }

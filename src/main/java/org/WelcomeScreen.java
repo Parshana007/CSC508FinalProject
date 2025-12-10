@@ -93,7 +93,7 @@ public class WelcomeScreen extends JPanel {
                 System.out.println(roomCode);
 
 
-                if (Blackboard.getInstance().getGameFlow().isOpponentReady()) {
+                if (Blackboard.getInstance().getGameFlow().isOpponentReadyRoom()) {
                     Blackboard.getInstance().getGameFlow().setPhase(Phase.PLACEMENT);
                 } else {
                     Blackboard.getInstance().getGameFlow().setPhase(Phase.WAITFOROPPONENTROOMID);

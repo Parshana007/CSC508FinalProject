@@ -79,6 +79,10 @@ public class Blackboard extends PropertyChangeSupport {
 
     }
 
+    public void submitShipsPlacement() {
+        firePropertyChange("shipsPlaced", null, null);
+    }
+
 
     public OpponentState getOpponentState() {
         return opponentState;

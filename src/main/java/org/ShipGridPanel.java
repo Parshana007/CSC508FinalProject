@@ -93,6 +93,8 @@ public class ShipGridPanel extends GridPanel implements PropertyChangeListener {
         List<Point> ship5Points = new ArrayList<>();
         ship5Points.add(new Point(5, 5));
         ships.add(new Ship(ship5Points));
+
+        Blackboard.getInstance().getPlayerState().setMyShips(ships);
     }
 
     @Override

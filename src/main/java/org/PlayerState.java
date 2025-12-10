@@ -15,6 +15,10 @@ public class PlayerState {
         myHitMiss = new HitMiss();
     }
 
+    public void setMyShips(List<Ship> ships) {
+        myShips = ships;
+    }
+
     public void addShip(Ship ship) {
         this.myShips.add(ship);
     }

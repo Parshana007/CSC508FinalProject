@@ -47,8 +47,7 @@ public class ScreenManager extends JPanel implements PropertyChangeListener {
             case WONGAME -> layout.show(this, WON);
             case LOSTGAME -> layout.show(this, LOST);
 
-            case WAITFOROPPONENTROOMID -> showWaitingPopup();
-//            case PLACEMENT -> layout.show(this, PLACE);
+            case WAITFOROPPONENTROOMID, WAITFOROPPONENTPLACEMENT -> showWaitingPopup();
             case PLACEMENT -> {
                 layout.show(this, PLACE);
                 if (waitingDialog != null) {
@@ -56,9 +55,17 @@ public class ScreenManager extends JPanel implements PropertyChangeListener {
                     waitingDialog = null;
                 }
             }
-//            case WAITFOROPPONENTPLACEMENT ->
-//                    layout.show(this, WAIT); // reuse waiting screen
-//            case GUESSING -> layout.show(this, GAME);
+            case GUESSING -> {
+                layout.show(this, GAME);
+                if (waitingDialog != null) {
+                    waitingDialog.dispose();
+                    waitingDialog = null;
+                }
+            }
+            case WAITFOROPPONENTGUESS -> {
+                showWaitingPopup();
+                layout.show(this, GAME);
+            }
         }
     }
 

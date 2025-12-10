@@ -11,13 +11,19 @@ public class PlacementScreen extends JPanel implements PropertyChangeListener {
         // Set layout first
         setLayout(new BorderLayout());
 
-        // --- Bottom button instead of top label ---
+        // Submit button
         JButton submitButton = new JButton("Submit Ships");
         submitButton.setFont(new Font("SansSerif", Font.BOLD, 20));
         submitButton.setPreferredSize(new Dimension(200, 50)); // Optional
         submitButton.addActionListener(e -> {
-            // TODO: hook up ship submission logic
-            System.out.println("Ships submitted!");
+            // Whichever player submits their placement first, takes the first turn
+            if (Blackboard.getInstance().getGameFlow().isOpponentReadyPlacement()) {
+                Blackboard.getInstance().submitShipsPlacement();
+                Blackboard.getInstance().getGameFlow().setPhase(Phase.WAITFOROPPONENTGUESS);
+            } else {
+                Blackboard.getInstance().submitShipsPlacement();
+                Blackboard.getInstance().getGameFlow().setPhase(Phase.WAITFOROPPONENTPLACEMENT);
+            }
         });
         add(submitButton, BorderLayout.SOUTH);
 
