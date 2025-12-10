@@ -4,6 +4,10 @@ import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ *  Represents the possible results of a player's guess. Used to update the grid accordingly.
+ */
+
 public class PlayerMoveResult {
     private MoveResult result;
     private Point coordinate;

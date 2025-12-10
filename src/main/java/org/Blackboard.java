@@ -5,6 +5,11 @@ import java.beans.PropertyChangeSupport;
 import java.util.List;
 import java.util.UUID;
 
+/**
+ *  Blackboard is a singleton that holds the state of both players, the flow of the game, and the room ID used
+ *  for connecting to the broker.
+ */
+
 public class Blackboard extends PropertyChangeSupport {
     private static Blackboard instance;
     private PlayerState playerState;
@@ -70,14 +75,10 @@ public class Blackboard extends PropertyChangeSupport {
             case SUNK -> this.opponentState.addSunk(sunkCoords);
         }
 
-        System.out.println("this opponent hits: " + this.opponentState.getHits());
-        System.out.println("this opponent misses: " + this.opponentState.getMisses());
-
         firePropertyChange("opponentStateUpdated", null, result);
 
         // Check if I won
         if (this.opponentState.allShipsSunk()) {
-//            firePropertyChange("gameOver", null, "me");
             this.gameFlow.setPhase(Phase.WONGAME);
             firePropertyChange("phase", null, Phase.WONGAME);
             firePropertyChange("gameOver", null, "opponentWon");
@@ -87,7 +88,6 @@ public class Blackboard extends PropertyChangeSupport {
 
     public void submitShipsPlacement() {
         firePropertyChange("shipsPlaced", null, null);
-        System.out.println("Ships Placed" + this.playerState.getMyShips());
     }
 
 
@@ -108,16 +108,8 @@ public class Blackboard extends PropertyChangeSupport {
         return roomID;
     }
 
-    public void setBroker(String broker) {
-        this.broker = broker;
-    }
-
     public String getBroker() {
         return broker;
-    }
-
-    public void setTopic(String topic) {
-        this.topic = topic;
     }
 
     public String getTopic() {

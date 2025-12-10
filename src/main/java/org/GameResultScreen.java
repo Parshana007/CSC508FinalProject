@@ -3,6 +3,11 @@ package org;
 import javax.swing.*;
 import java.awt.*;
 
+/**
+ *  Final screen of the game. Displays text depending on whether player won or lost, and allows player
+ *  to replay.
+ */
+
 public class GameResultScreen extends JPanel {
 
     public GameResultScreen(Phase phase) {

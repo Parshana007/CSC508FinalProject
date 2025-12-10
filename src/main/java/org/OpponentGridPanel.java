@@ -5,28 +5,20 @@ import java.awt.*;
 import java.awt.event.MouseEvent;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
-import java.util.ArrayList;
 import java.util.List;
 
-// Circle appear for a guess
-// Trigger checking with opponent
-// Draws the miss
-// Updates placement for opponent's turn and puts me in waiting stage
+/**
+ *  Visualizes the elements on the opponent's grid, including my previous guesses (hits or misses) and my
+ *  current unsubmitted guess.
+ */
 
 public class OpponentGridPanel extends GridPanel implements PropertyChangeListener {
-    private boolean editMode;
     private Point currentGuess = null;
 
-    public OpponentGridPanel(boolean editMode) {
-        this.editMode = editMode;
-    }
+    public OpponentGridPanel() {}
 
     public Point getCurrentGuess() {
         return currentGuess;
-    }
-
-    public void setEditMode(boolean editMode) {
-        this.editMode = editMode;
     }
 
     public void clearGuess() {
@@ -73,7 +65,6 @@ public class OpponentGridPanel extends GridPanel implements PropertyChangeListen
                 Point coordinate = new Point(col, row);
 
                 if (hits.contains(coordinate)) {
-                    System.out.println("HIT: " + coordinate);
                     g.setColor(Color.RED);
                     g.drawLine(x + 4, y + 4, x + cellWidth - 4, y + cellHeight - 4);
                     g.drawLine(x + cellWidth - 4, y + 4, x + 4, y + cellHeight - 4);
@@ -96,7 +87,6 @@ public class OpponentGridPanel extends GridPanel implements PropertyChangeListen
 
     @Override
     public void mouseClicked(MouseEvent e) {
-        if (!editMode) return;
 
         Point grid = toGrid(e.getX(), e.getY());
         System.out.println("GRID x: " + grid.x + " y: " + grid.y);
@@ -105,12 +95,8 @@ public class OpponentGridPanel extends GridPanel implements PropertyChangeListen
         if (grid.x < 0 || grid.x >= cols || grid.y < 0 || grid.y >= rows)
             return;
 
-        Point coordinate = toCoordinate(grid.x, grid.y);
-        System.out.println("MOUSE CLICK GUESS MADE");
-        System.out.println("coordinate x " + coordinate.getX() + " Coordinate y " + coordinate.getY());
-
         // draw your guess
-        currentGuess = coordinate;
+        currentGuess = toCoordinate(grid.x, grid.y);
         repaint();
     }
 

@@ -10,6 +10,11 @@ import java.util.List;
 import java.util.UUID;
 import java.beans.PropertyChangeEvent;
 
+/**
+ *  Subscribes to the MQTT broker to receive signals for when the gameflow is advanced, and receives the opponent's
+ *  guesses during the game
+ */
+
 public class MQTTSubscriber implements MqttCallback, PropertyChangeListener {
     private String CLIENT_ID = "brokerverse-subscriber-";
     private MqttClient client;
@@ -24,11 +29,6 @@ public class MQTTSubscriber implements MqttCallback, PropertyChangeListener {
             client.connect(opts);
             client.setCallback(this);
 
-//            client.subscribe(Blackboard.getInstance().getRoomID() + "/#");
-
-//            String roomTopic = Blackboard.getInstance().getTopic() + Blackboard.getInstance().getRoomID();
-//            client.subscribe(roomTopic + "/#");
-//            System.out.println("Subscribed to: " + roomTopic + "/#");
             System.out.println("Subscriber connected: " + Blackboard.getInstance().getBroker());
         } catch (MqttException e) {
             e.printStackTrace();
@@ -43,8 +43,6 @@ public class MQTTSubscriber implements MqttCallback, PropertyChangeListener {
     public void subscribeToRoom() {
         System.out.println("Trying to subscribe, connected=" + client.isConnected());
         String roomID = Blackboard.getInstance().getRoomID();
-
-        System.out.println("Trying to subscribe, connected=" + roomID);
 
         if (roomID == null || roomID.isEmpty()) return;
 
@@ -68,7 +66,7 @@ public class MQTTSubscriber implements MqttCallback, PropertyChangeListener {
         if (!"roomID".equals(evt.getPropertyName())) return;
         // Room code was just set, subscribe now
         subscribeToRoom();
-// Small delay to ensure subscription
+        // Small delay to ensure subscription
         try {
             Thread.sleep(50);
         } catch (InterruptedException ex) {
@@ -77,27 +75,17 @@ public class MQTTSubscriber implements MqttCallback, PropertyChangeListener {
         Blackboard.getInstance().firePropertyChange("roomJoined", null, true);
     }
 
-
-
     @Override
     public void messageArrived(String topic, MqttMessage mqttMessage) {
         String payload = new String(mqttMessage.getPayload());
-        System.out.println("MQTTSubscriber received: " + payload);
 
         String[] parts = payload.split(":");
-        System.out.println("Myplayer: " + Blackboard.getInstance().getMyPlayer());
-        System.out.println("topic here " + topic);
 
         String myPlayerStr = String.valueOf(Blackboard.getInstance().getMyPlayer());
-        System.out.println(topic);
-        System.out.println(myPlayerStr);
-        System.out.println(topic.trim().contains(myPlayerStr));
 
         String lastPart = topic.substring(topic.lastIndexOf("/") + 1);
-        System.out.println(lastPart); // Output: 1
 
         if (!lastPart.contains(myPlayerStr)) { // TO ENSURE I AM NOT READING MY OWN MSGS
-            System.out.println("IN IF");
 
             if (parts.length == 2 && parts[0].equals("GUESS")) {
                 Point coord = decodePoint(parts[1]);
@@ -124,23 +112,19 @@ public class MQTTSubscriber implements MqttCallback, PropertyChangeListener {
                 }
             }
             else if (parts[0].equals("JOINED_ROOM")) {
-//                System.out.println("SUBSCRIBED TO: " + Blackboard.getInstance().getRoomID() + "/#");
-//                System.out.println("TOPIC = " + topic + ", PAYLOAD = " + payload);
                 Blackboard.getInstance().getGameFlow().setOpponentReadyRoom(true);
                 Blackboard.getInstance().getGameFlow().setPhase(Phase.PLACEMENT);
                 System.out.println("Changed to phase: " + Blackboard.getInstance().getGameFlow().getPhase());
-//                }
             }
             else if (parts[0].equals("GAME_OVER")) {
-                // Opponent just won
                 if (parts[1].equals("opponentWon")) {
+                    // Opponent just won
                     Blackboard.getInstance().getGameFlow().setPhase(Phase.LOSTGAME);
                 }
             }
 
         }
     }
-
 
     @Override
     public void deliveryComplete(IMqttDeliveryToken iMqttDeliveryToken) {

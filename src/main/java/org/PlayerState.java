@@ -4,6 +4,9 @@ import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ *  Tracks the locations of my ships, as well as my opponent's guesses on my grid.
+ */
 
 public class PlayerState {
 
@@ -21,10 +24,6 @@ public class PlayerState {
 
     public void setMyShips(List<Ship> ships) {
         myShips = ships;
-    }
-
-    public void addShip(Ship ship) {
-        this.myShips.add(ship);
     }
 
     // Opponent guesses a coordinate player decides if hit/miss/sunk
@@ -66,7 +65,6 @@ public class PlayerState {
         return MoveResult.HIT;
     }
 
-    //TODO check if myships is the total amount of ships placed
     public boolean allShipsSunk() {
         return this.myHitMiss.getSunkShips().size() == Blackboard.getInstance().getTotalShips();
     }

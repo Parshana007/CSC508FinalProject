@@ -5,6 +5,11 @@ import java.awt.*;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 
+/**
+ *  The main gameplay screen. Visualizes both my grid and the opponent's grid, and a button to submit my guess
+ *  when it's my turn.
+ */
+
 public class GameScreen extends JPanel implements PropertyChangeListener {
 
     public GameScreen() {
@@ -20,7 +25,7 @@ public class GameScreen extends JPanel implements PropertyChangeListener {
 
 
         // Opponent Player Grid
-        OpponentGridPanel oppGrid = new OpponentGridPanel(true);
+        OpponentGridPanel oppGrid = new OpponentGridPanel();
         JPanel oppLabeled = wrapGridWithLabels(oppGrid);
 
         JPanel oppWrapper = new JPanel(new BorderLayout());
@@ -29,8 +34,7 @@ public class GameScreen extends JPanel implements PropertyChangeListener {
 
 
         // My Player Grid
-        ShipGridPanel myGrid = new ShipGridPanel(true);
-        myGrid.setEditMode(false);
+        MyGridPanel myGrid = new MyGridPanel(false);
         JPanel myLabeled = wrapGridWithLabels(myGrid);
 
         JPanel myWrapper = new JPanel(new BorderLayout());

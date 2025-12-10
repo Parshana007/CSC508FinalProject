@@ -41,7 +41,7 @@ public class PlacementScreen extends JPanel implements PropertyChangeListener {
         rulesWrapper.add(rulesPanel, BorderLayout.CENTER);
 
         // My Player Grid
-        ShipGridPanel myGrid = new ShipGridPanel(true);
+        MyGridPanel myGrid = new MyGridPanel(true);
         JPanel myLabeled = wrapGridWithLabels(myGrid);
 
         JPanel myWrapper = new JPanel(new BorderLayout());

@@ -3,6 +3,10 @@ package org;
 import javax.swing.*;
 import java.awt.*;
 
+/**
+ *  Displays the rules of the game during the Placement phase.
+ */
+
 public class RulesPanel extends JPanel {
 
     private final String[] setupRules = {
@@ -15,9 +19,9 @@ public class RulesPanel extends JPanel {
 
     private final String[] gameRules = {
             "The object of the game is to guess where the opponent's ships are.",
-            "During your turn, click a cell on the opponent's grid to fire.",
-            "If you hit one of their ships, you get another turn.",
-            "Otherwise, the opponent takes their turn.",
+            "During your turn, click a cell on the opponent's grid to select it.",
+            "Click \"Submit\" to fire.",
+            "Opponent takes their turn.",
             "The game continues until one player's ships have all been sunk."
     };
 

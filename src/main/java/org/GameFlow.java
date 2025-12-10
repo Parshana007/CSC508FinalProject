@@ -1,11 +1,13 @@
 package org;
 
+/**
+ * Tracks the current phase of the game; keeps players in sync.
+ */
+
 public class GameFlow {
     private Phase phase;
-    private String turn; // ME or OPP
     private boolean opponentReadyRoom = false;
     private boolean opponentReadyPlacement = false;
-    private boolean opponentFinishedTurn = false;
 
     public GameFlow() {
 
@@ -20,17 +22,8 @@ public class GameFlow {
         return phase;
     }
 
-    public void setTurn(String turn) {
-        this.turn = turn;
-    }
-
-    public String getTurn() {
-        return turn;
-    }
-
     public void setOpponentReadyRoom(boolean opponentReadyRoom) {
         this.opponentReadyRoom = opponentReadyRoom;
-//        this.setPhase(Phase.PLACEMENT);
     }
 
     public boolean isOpponentReadyRoom() {
@@ -43,14 +36,6 @@ public class GameFlow {
 
     public boolean isOpponentReadyPlacement() {
         return opponentReadyPlacement;
-    }
-
-    public void setOpponentFinishedTurn(boolean opponentFinishedTurn) {
-        this.opponentFinishedTurn = opponentFinishedTurn;
-    }
-
-    public boolean isOpponentFinishedTurn() {
-        return opponentFinishedTurn;
     }
 
 }

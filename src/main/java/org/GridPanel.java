@@ -5,6 +5,10 @@ import java.awt.*;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 
+/**
+ *  Visualizes a grid, on which ships can be placed depending on whether it's my grid or the opponent's grid.
+ */
+
 public class GridPanel extends JPanel implements MouseListener {
     protected int rows = 10;
     protected int cols = 10;

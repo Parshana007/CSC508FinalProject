@@ -11,6 +11,10 @@ import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.util.stream.Collectors;
 
+/**
+ *  Sends signals to the MQTT broker when the player advances the gameflow, and publishes guesses during the game
+ */
+
 public class MQTTPublisher implements PropertyChangeListener {
     private String broker;
 
@@ -47,7 +51,6 @@ public class MQTTPublisher implements PropertyChangeListener {
 
             if (evt.getPropertyName().equals("roomJoined")) {
                 String msg = "JOINED_ROOM";
-//                System.out.println("PUBLISH TO: " + Blackboard.getInstance().getFullTopic());
                 // retains past messages
                 MqttMessage mqttMessage = new MqttMessage(msg.getBytes());
                 mqttMessage.setRetained(true);
@@ -85,6 +88,7 @@ public class MQTTPublisher implements PropertyChangeListener {
                 client.publish(Blackboard.getInstance().getFullTopic(), new MqttMessage(msg.getBytes()));
             }
 
+            // 4. Game has ended
             else if (evt.getPropertyName().equals("gameOver")) {
                 String msg = "GAME_OVER:" + evt.getNewValue();
                 client.publish(Blackboard.getInstance().getFullTopic(), new MqttMessage(msg.getBytes()));

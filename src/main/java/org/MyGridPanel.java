@@ -2,32 +2,33 @@ package org;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ShipGridPanel extends GridPanel implements PropertyChangeListener {
+/**
+ *  Visualizes the elements of my grid, including my ships and the opponent's guesses of where my ships are (hits/misses).
+ *  When in the ship placement screen, allows the player to click a ship and use arrow keys to move it.
+ */
+
+public class MyGridPanel extends GridPanel implements PropertyChangeListener {
 
     private List<Ship> ships = new ArrayList<>();
     private Ship[][] boardShips;
 
+    // indicates whether this is in the ship placement screen
     private boolean editMode;
     private Ship activeShip;
 
-    public ShipGridPanel(boolean editMode) {
+    public MyGridPanel(boolean editMode) {
         this.editMode = editMode;
         if (editMode) {
-            initializeShips();
             setupKeyBindings();
         }
-    }
 
-    public void setEditMode(boolean editMode) {
-        this.editMode = editMode;
+        initializeShips();
     }
 
     @Override
@@ -132,10 +133,10 @@ public class ShipGridPanel extends GridPanel implements PropertyChangeListener {
         input.put(KeyStroke.getKeyStroke("UP"),    "moveUp");
         input.put(KeyStroke.getKeyStroke("DOWN"),  "moveDown");
 
-        actions.put("moveLeft",  new MoveShipAction(-1, 0));
-        actions.put("moveRight", new MoveShipAction(1, 0));
-        actions.put("moveUp",    new MoveShipAction(0, -1));
-        actions.put("moveDown",  new MoveShipAction(0, 1));
+        actions.put("moveLeft",  new MoveShipAction(-1, 0, this));
+        actions.put("moveRight", new MoveShipAction(1, 0, this));
+        actions.put("moveUp",    new MoveShipAction(0, -1, this));
+        actions.put("moveDown",  new MoveShipAction(0, 1, this));
     }
 
     @Override
@@ -147,46 +148,30 @@ public class ShipGridPanel extends GridPanel implements PropertyChangeListener {
         }
     }
 
-    private class MoveShipAction extends AbstractAction {
-        int dx, dy;
+    public void moveActiveShip(int dx, int dy) {
+        if (!editMode) return;
 
-        MoveShipAction(int dx, int dy) {
-            this.dx = dx;
-            this.dy = dy;
-        }
+        List<Point> newCoords = new ArrayList<>();
+        for (Point coord : activeShip.getCoordinates()) {
+            int newX = coord.x + dx;
+            int newY = coord.y + dy;
 
-        @Override
-        public void actionPerformed(ActionEvent e) {
-            if (!editMode || activeShip == null)
-                return;  // ignore keys unless in edit mode AND a ship is selected
-
-            moveActiveShip(dx, dy);
-        }
-
-        private void moveActiveShip(int dx, int dy) {
-            if (activeShip == null) return;
-
-            List<Point> newCoords = new ArrayList<>();
-            for (Point coord : activeShip.getCoordinates()) {
-                int newX = coord.x + dx;
-                int newY = coord.y + dy;
-
-                if (!canPlaceShip(newX, newY)) {
-                    return; // if any cell is invalid, cancel move
-                }
-
-                newCoords.add(new Point(newX, newY));
+            if (!canPlaceShip(newX, newY)) {
+                return; // if any cell is invalid, cancel move
             }
 
-            // move is valid: update coordinates
-            activeShip.setCoordinates(newCoords);
-
-            repaint();
+            newCoords.add(new Point(newX, newY));
         }
 
-        private boolean canPlaceShip(int newX, int newY) {
-            return newY >= 0 && newY < rows && newX >= 0 && newX < cols
-                    && (boardShips[newY][newX] == activeShip || boardShips[newY][newX] == null);
-        }
+        // move is valid: update coordinates
+        activeShip.setCoordinates(newCoords);
+
+        repaint();
     }
+
+    private boolean canPlaceShip(int newX, int newY) {
+        return newY >= 0 && newY < rows && newX >= 0 && newX < cols
+                && (boardShips[newY][newX] == activeShip || boardShips[newY][newX] == null);
+    }
+
 }

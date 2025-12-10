@@ -4,6 +4,10 @@ import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ *  Represents one player's set of guesses on the other player's grid.
+ */
+
 public class HitMiss {
     private List<Point> hits;
     private List<Point> misses;

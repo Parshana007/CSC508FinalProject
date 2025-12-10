@@ -3,8 +3,11 @@ package org;
 import javax.swing.*;
 import java.awt.*;
 
-public class WelcomeScreen extends JPanel {
+/**
+ * Displays the initial screen. Prompts users to enter their name, select # of players, and if 2 players, enter a room code.
+ */
 
+public class WelcomeScreen extends JPanel {
 
     public WelcomeScreen() {
         setBackground(Color.WHITE);
@@ -17,7 +20,6 @@ public class WelcomeScreen extends JPanel {
     }
 
     private void initialize() {
-        // TODO do i need this?
         JRadioButton onePlayerButton;
         JLabel roomCodeLabel;
         JTextField playerNameField;
@@ -30,7 +32,6 @@ public class WelcomeScreen extends JPanel {
         titleLabel.setFont(new Font("SansSerif", Font.PLAIN, 24));
         titleLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
         add(titleLabel);
-//        add(Box.createRigidArea(new Dimension(0, 30)));
 
         // Player name panel
         JPanel namePanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
@@ -41,7 +42,6 @@ public class WelcomeScreen extends JPanel {
         namePanel.add(nameLabel);
         namePanel.add(playerNameField);
         add(namePanel);
-//        add(Box.createRigidArea(new Dimension(0, 20)));
 
         // Player mode panel
         JPanel modePanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
@@ -77,10 +77,7 @@ public class WelcomeScreen extends JPanel {
         JButton startButton = new JButton("Start");
         startButton.setFont(new Font("SansSerif", Font.PLAIN, 16));
         startButton.setAlignmentX(Component.CENTER_ALIGNMENT);
-        // startGame is the panel when clicking the button start game
-//        startButton.addActionListener(e -> startGame());
 
-        // TODO REVIEW
         // when start button is clicked
         startButton.addActionListener(e -> {
             String playerName = playerNameField.getText();
@@ -101,12 +98,9 @@ public class WelcomeScreen extends JPanel {
             } else {
                 Blackboard.getInstance().setRoomID(null);
                 Blackboard.getInstance().getGameFlow().setPhase(Phase.PLACEMENT);
-                // tell the AI to place their ships?
+                // TODO: tell the AI to place their ships?
             }
-
-//            Blackboard.setValue("screen", "mainPanel");
         });
-
 
         add(startButton);
 
@@ -114,21 +108,5 @@ public class WelcomeScreen extends JPanel {
         // if they pick two player mode, only then will the room code panel be visible
         twoPlayerButton.addActionListener(e -> roomCodePanel.setVisible(true));
         onePlayerButton.addActionListener(e -> roomCodePanel.setVisible(false));
-    }
-
-    @Override
-    protected void paintComponent(Graphics g) {
-        super.paintComponent(g);
-    }
-
-    public static void main(String[] args) {
-        SwingUtilities.invokeLater(() -> {
-            JFrame frame = new JFrame("Battle Game");
-            frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-            frame.setSize(600, 400);
-            frame.setLocationRelativeTo(null);
-            frame.add(new WelcomeScreen());
-            frame.setVisible(true);
-        });
     }
 }

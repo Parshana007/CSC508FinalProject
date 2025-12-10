@@ -5,17 +5,19 @@ import java.awt.*;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 
+/**
+ *  Handles which screen to show at a given point during the flow of the game.
+ */
+
 public class ScreenManager extends JPanel implements PropertyChangeListener {
 
     private CardLayout layout = new CardLayout();
 
     // identifiers
-//    private static final String ROOM = "ROOM";
-//    private static final String WAIT = "WAIT";
     private static final String PLACE = "PLACE";
     private static final String WON = "WON";
     private static final String LOST = "LOST";
-    private static final String WELCOMESCREEN = "WELCOMESCREEN";
+    private static final String WELCOME = "WELCOME";
     private static final String GAME = "GAME";
 
 
@@ -24,17 +26,15 @@ public class ScreenManager extends JPanel implements PropertyChangeListener {
         setLayout(layout);
 
         // Add screens
-        add(new WelcomeScreen(), WELCOMESCREEN);
+        add(new WelcomeScreen(), WELCOME);
         add(new GameResultScreen(Phase.WONGAME), WON);
         add(new GameResultScreen(Phase.LOSTGAME), LOST);
 
-//        add(new RoomScreen(), ROOM);
-//        add(new WaitingScreen("Waiting for other player to join..."), WAIT);
         add(new PlacementScreen(), PLACE);
         add(new GameScreen(), GAME);
 
         // which screen to start with
-        layout.show(this, WELCOMESCREEN);
+        layout.show(this, WELCOME);
     }
 
     @Override

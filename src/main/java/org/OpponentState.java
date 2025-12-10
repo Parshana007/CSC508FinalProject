@@ -4,6 +4,9 @@ import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Tracks my guesses on the opponent's ships (hits, misses, sinks)
+ */
 
 public class OpponentState {
     private HitMiss myHitMiss;  // my guess of opp ships
