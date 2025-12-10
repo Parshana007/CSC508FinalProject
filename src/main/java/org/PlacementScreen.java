@@ -6,42 +6,43 @@ import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 
 public class PlacementScreen extends JPanel implements PropertyChangeListener {
-    private ShipGridPanel myGrid;       // Your ship placement grid
-    private RulesPanel rulesPanel;
 
     public PlacementScreen() {
         // Set layout first
         setLayout(new BorderLayout());
 
-        // Top label
-        JLabel topLabel = new JLabel("Select a ship to place", SwingConstants.CENTER);
-        topLabel.setFont(new Font("SansSerif", Font.BOLD, 24));
-        topLabel.setBorder(BorderFactory.createEmptyBorder(10, 0, 10, 0));
-        add(topLabel, BorderLayout.NORTH);
+        // --- Bottom button instead of top label ---
+        JButton submitButton = new JButton("Submit Ships");
+        submitButton.setFont(new Font("SansSerif", Font.BOLD, 20));
+        submitButton.setPreferredSize(new Dimension(200, 50)); // Optional
+        submitButton.addActionListener(e -> {
+            // TODO: hook up ship submission logic
+            System.out.println("Ships submitted!");
+        });
+        add(submitButton, BorderLayout.SOUTH);
 
+        // --- Main content layout ---
         JPanel outer = new JPanel(new BorderLayout());
         outer.setBorder(BorderFactory.createEmptyBorder(20, 0, 20, 0));
 
         JPanel container = new JPanel();
         container.setLayout(new BoxLayout(container, BoxLayout.X_AXIS));
 
-
         // Rules Panel
-        rulesPanel = new RulesPanel();
+        RulesPanel rulesPanel = new RulesPanel();
         JPanel rulesWrapper = new JPanel(new BorderLayout());
         rulesWrapper.setBorder(BorderFactory.createLineBorder(new Color(139, 69, 19), 2));
-
+        rulesWrapper.add(rulesPanel, BorderLayout.CENTER);
 
         // My Player Grid
-        myGrid = new ShipGridPanel(true); // editMode = true → movable ships
+        ShipGridPanel myGrid = new ShipGridPanel(true);
         JPanel myLabeled = wrapGridWithLabels(myGrid);
 
         JPanel myWrapper = new JPanel(new BorderLayout());
         myWrapper.setBorder(BorderFactory.createLineBorder(new Color(139, 69, 19), 2));
         myWrapper.add(myLabeled, BorderLayout.CENTER);
 
-
-        // Add spacing between components
+        // Spacing around components
         container.add(Box.createRigidArea(new Dimension(20, 0)));
         container.add(rulesWrapper);
         container.add(Box.createRigidArea(new Dimension(40, 0)));
@@ -51,9 +52,11 @@ public class PlacementScreen extends JPanel implements PropertyChangeListener {
         outer.add(container, BorderLayout.CENTER);
         add(outer, BorderLayout.CENTER);
 
+        // Blackboard listeners
         Blackboard.getInstance().addPropertyChangeListener(this);
         Blackboard.getInstance().addPropertyChangeListener(myGrid);
     }
+
 
     private JPanel wrapGridWithLabels(JPanel grid) {
         JPanel labeled = new JPanel(new BorderLayout());
