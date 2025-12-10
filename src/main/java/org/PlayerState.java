@@ -23,6 +23,10 @@ public class PlayerState {
         myShips = ships;
     }
 
+    public HitMiss getMyHitMiss() {
+        return myHitMiss;
+    }
+
     public void addShip(Ship ship) {
         this.myShips.add(ship);
     }

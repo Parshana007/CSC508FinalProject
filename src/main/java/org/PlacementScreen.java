@@ -16,6 +16,7 @@ public class PlacementScreen extends JPanel implements PropertyChangeListener {
         submitButton.setFont(new Font("SansSerif", Font.BOLD, 20));
         submitButton.setPreferredSize(new Dimension(200, 50)); // Optional
         submitButton.addActionListener(e -> {
+
             // Whichever player submits their placement first, takes the first turn
             if (Blackboard.getInstance().getGameFlow().isOpponentReadyPlacement()) {
                 Blackboard.getInstance().submitShipsPlacement();

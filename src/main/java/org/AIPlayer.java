@@ -2,7 +2,7 @@
 package org;
 // public class AIPlayer extends Player {
 
-public class AIPlayer {
+public class AIPlayer extends PlayerState {
     public static void main(String[] args) {
         // creates new LlamaClient using api key from config
         LlamaClient llama = new LlamaClient(Config.get("GROQ_API_KEY"));

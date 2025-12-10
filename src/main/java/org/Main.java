@@ -5,15 +5,31 @@ import java.awt.*;
 
 public class Main extends JFrame {
 
-    public Main() {
-        ScreenManager screens = new ScreenManager();
+    public Main(boolean isAI) {
+
+        ScreenManager screens = new ScreenManager(isAI);
         add(screens);
         Blackboard.getInstance().addPropertyChangeListener(screens);
     }
 
     public static void main(String[] args) {
+
+        boolean isAI = false;
+        if(args.length > 0 && args[0].equals("AI")){
+            isAI=true;
+            Blackboard.getInstance().setRoomID("AIROOMCODE");
+            Blackboard.getInstance().initializeShips();
+            Blackboard.getInstance().submitShipsPlacement();
+            System.out.println("Ships Placed for AI" + Blackboard.getInstance().getPlayerState().getMyShips());
+            Blackboard.getInstance().getGameFlow().setPhase(Phase.GUESSING);
+        }
+
+        final boolean aiFlag=isAI;
+
+
+
         SwingUtilities.invokeLater(() -> {
-            Main m = new Main();
+            Main m = new Main(aiFlag);
             m.setTitle("Battleship");
             m.setSize(1200, 600);
             m.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);

@@ -34,6 +34,7 @@ public class ShipGridPanel extends GridPanel implements PropertyChangeListener {
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
         drawShips(g);
+        drawHitMiss(g);
     }
 
     private void drawShips(Graphics g) {
@@ -63,6 +64,42 @@ public class ShipGridPanel extends GridPanel implements PropertyChangeListener {
 
         g.setColor(active ? Color.RED : Color.DARK_GRAY);
         g.drawRect((minX - 1) * cellWidth, (minY - 1) * cellHeight, width, height);
+    }
+
+    private void drawHitMiss(Graphics g) {
+        List<Point> hits = Blackboard.getInstance().getPlayerState().getMyHitMiss().getHits();
+        List<Point> misses = Blackboard.getInstance().getPlayerState().getMyHitMiss().getMisses();
+        List<Ship> sunk = Blackboard.getInstance().getPlayerState().getMyHitMiss().getSunkShips();
+        System.out.println("HITS: " + hits);
+        System.out.println("MISSES: " + misses);
+
+        for (int row = 1; row <= rows; row++) {
+            for (int col = 1; col <= cols; col++) {
+                int x = (col - 1) * cellWidth;
+                int y = (row - 1) * cellHeight;
+
+                Point coordinate = new Point(col, row);
+
+                if (hits.contains(coordinate)) {
+                    System.out.println("HIT: " + coordinate);
+                    g.setColor(Color.RED);
+                    g.drawLine(x + 4, y + 4, x + cellWidth - 4, y + cellHeight - 4);
+                    g.drawLine(x + cellWidth - 4, y + 4, x + 4, y + cellHeight - 4);
+                } else if (misses.contains(coordinate)) {
+                    g.setColor(Color.WHITE);
+                    g.drawLine(x + 4, y + 4, x + cellWidth - 4, y + cellHeight - 4);
+                    g.drawLine(x + cellWidth - 4, y + 4, x + 4, y + cellHeight - 4);
+                }
+
+                for(Ship ship : sunk) {
+                    if (ship.getCoordinates().contains(coordinate)) {
+                        g.setColor(Color.RED);
+                        g.fillRect(x + 4, y + 4, cellWidth - 4, cellHeight - 4);
+                    }
+                }
+
+            }
+        }
     }
 
     private void initializeShips() {
@@ -140,6 +177,10 @@ public class ShipGridPanel extends GridPanel implements PropertyChangeListener {
 
     @Override
     public void propertyChange(PropertyChangeEvent evt) {
+        if (evt.getPropertyName().equals("opponentStateUpdated")) {
+            repaint();
+        }
+
         if (SwingUtilities.isEventDispatchThread()) {
             repaint();
         } else {

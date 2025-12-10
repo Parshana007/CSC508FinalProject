@@ -16,6 +16,22 @@ public class WelcomeScreen extends JPanel {
         initialize();
     }
 
+    private void launchSecondProgramInstance() {
+        try {
+            ProcessBuilder pb = new ProcessBuilder(
+                    "java",
+                    "-cp",
+                    System.getProperty("java.class.path"),
+                    "org.Main"  ,
+                    "AI"// your actual main class
+            );
+            pb.inheritIO();
+            pb.start();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
     private void initialize() {
         // TODO do i need this?
         JRadioButton onePlayerButton;
@@ -99,8 +115,21 @@ public class WelcomeScreen extends JPanel {
                     Blackboard.getInstance().getGameFlow().setPhase(Phase.WAITFOROPPONENTROOMID);
                 }
             } else {
-                Blackboard.getInstance().setRoomID(null);
+//                Blackboard.getInstance().setPlayerMode("one");
+                Blackboard.getInstance().getGameFlow().setPhase(Phase.WAITFOROPPONENTROOMID);
+
+                String aiRoom = "AIROOMCODE";
+                Blackboard.getInstance().setRoomID(aiRoom);
+                System.out.println("picked one player");
+                // Launch AI client in a new JVM process
+                launchSecondProgramInstance();
                 Blackboard.getInstance().getGameFlow().setPhase(Phase.PLACEMENT);
+
+
+
+
+//                Blackboard.getInstance().setRoomID(null);
+//                Blackboard.getInstance().getGameFlow().setPhase(Phase.PLACEMENT);
                 // tell the AI to place their ships?
             }
 

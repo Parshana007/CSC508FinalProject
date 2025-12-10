@@ -19,7 +19,7 @@ public class ScreenManager extends JPanel implements PropertyChangeListener {
     private static final String GAME = "GAME";
 
 
-    public ScreenManager() {
+    public ScreenManager(boolean isAI) {
         Blackboard.getInstance().addPropertyChangeListener(this);
         setLayout(layout);
 
@@ -32,9 +32,12 @@ public class ScreenManager extends JPanel implements PropertyChangeListener {
 //        add(new WaitingScreen("Waiting for other player to join..."), WAIT);
         add(new PlacementScreen(), PLACE);
         add(new GameScreen(), GAME);
-
+        if (isAI) {
+            layout.show(this, GAME);
+        }
+        else {
         // which screen to start with
-        layout.show(this, WELCOMESCREEN);
+        layout.show(this, WELCOMESCREEN);}
     }
 
     @Override

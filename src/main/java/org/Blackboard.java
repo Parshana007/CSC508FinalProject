@@ -2,6 +2,7 @@ package org;
 
 import java.awt.*;
 import java.beans.PropertyChangeSupport;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -84,6 +85,48 @@ public class Blackboard extends PropertyChangeSupport {
         }
 
     }
+
+    public void initializeShips() {
+        List<Ship> ships = getPlayerState().getMyShips();
+        if (!ships.isEmpty()) {
+            return;
+        }
+
+        ships = new ArrayList<>();
+
+        List<Point> ship1Points = new ArrayList<>();
+        ship1Points.add(new Point(1, 1));
+        ship1Points.add(new Point(2, 1));
+        ship1Points.add(new Point(3, 1));
+        ship1Points.add(new Point(4, 1));
+        ship1Points.add(new Point(5, 1));
+        ships.add(new Ship(ship1Points));
+
+        List<Point> ship2Points = new ArrayList<>();
+        ship2Points.add(new Point(2, 3));
+        ship2Points.add(new Point(2, 4));
+        ship2Points.add(new Point(2, 5));
+        ship2Points.add(new Point(2, 6));
+        ships.add(new Ship(ship2Points));
+
+        List<Point> ship3Points = new ArrayList<>();
+        ship3Points.add(new Point(4, 3));
+        ship3Points.add(new Point(5, 3));
+        ship3Points.add(new Point(6, 3));
+        ships.add(new Ship(ship3Points));
+
+        List<Point> ship4Points = new ArrayList<>();
+        ship4Points.add(new Point(7, 5));
+        ship4Points.add(new Point(7, 6));
+        ships.add(new Ship(ship4Points));
+
+        List<Point> ship5Points = new ArrayList<>();
+        ship5Points.add(new Point(5, 5));
+        ships.add(new Ship(ship5Points));
+
+        getPlayerState().setMyShips(ships);
+    }
+
 
     public void submitShipsPlacement() {
         firePropertyChange("shipsPlaced", null, null);
