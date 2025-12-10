@@ -11,15 +11,6 @@ public class GameScreen extends JPanel implements PropertyChangeListener {
         // Set layout first
         setLayout(new BorderLayout());
 
-        // Submit button
-        JButton submitButton = new JButton("Submit Guess");
-        submitButton.setFont(new Font("SansSerif", Font.BOLD, 20));
-        submitButton.setPreferredSize(new Dimension(200, 50)); // Optional
-        submitButton.addActionListener(e -> {
-            // TODO: handle guess logic
-        });
-        add(submitButton, BorderLayout.SOUTH);
-
         // --- Main content layout ---
         JPanel outer = new JPanel(new BorderLayout());
         outer.setBorder(BorderFactory.createEmptyBorder(20, 0, 20, 0));
@@ -29,7 +20,7 @@ public class GameScreen extends JPanel implements PropertyChangeListener {
 
 
         // Opponent Player Grid
-        OpponentGridPanel oppGrid = new OpponentGridPanel();
+        OpponentGridPanel oppGrid = new OpponentGridPanel(true);
         JPanel oppLabeled = wrapGridWithLabels(oppGrid);
 
         JPanel oppWrapper = new JPanel(new BorderLayout());
@@ -39,11 +30,29 @@ public class GameScreen extends JPanel implements PropertyChangeListener {
 
         // My Player Grid
         ShipGridPanel myGrid = new ShipGridPanel(true);
+        myGrid.setEditMode(false);
         JPanel myLabeled = wrapGridWithLabels(myGrid);
 
         JPanel myWrapper = new JPanel(new BorderLayout());
         myWrapper.setBorder(BorderFactory.createLineBorder(new Color(139, 69, 19), 2));
         myWrapper.add(myLabeled, BorderLayout.CENTER);
+
+        // Submit button
+        JButton submitButton = new JButton("Submit Guess");
+        submitButton.setFont(new Font("SansSerif", Font.BOLD, 20));
+        submitButton.setPreferredSize(new Dimension(200, 50)); // Optional
+        submitButton.addActionListener(e -> {
+            Point guess = oppGrid.getCurrentGuess();
+            if (guess == null) return; // no guess made
+
+            // Send my guess
+            Blackboard.getInstance().addMyGuess(guess);
+            oppGrid.clearGuess();
+
+            // Switch to waiting for opponent
+            Blackboard.getInstance().getGameFlow().setPhase(Phase.WAITFOROPPONENTGUESS);
+        });
+        add(submitButton, BorderLayout.SOUTH);
 
 
         // Add spacing between components

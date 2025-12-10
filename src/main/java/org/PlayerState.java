@@ -15,6 +15,10 @@ public class PlayerState {
         myHitMiss = new HitMiss();
     }
 
+    public List<Ship> getMyShips() {
+        return myShips;
+    }
+
     public void setMyShips(List<Ship> ships) {
         myShips = ships;
     }

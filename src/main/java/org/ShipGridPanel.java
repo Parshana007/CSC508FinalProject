@@ -26,6 +26,10 @@ public class ShipGridPanel extends GridPanel implements PropertyChangeListener {
         }
     }
 
+    public void setEditMode(boolean editMode) {
+        this.editMode = editMode;
+    }
+
     @Override
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
@@ -55,13 +59,18 @@ public class ShipGridPanel extends GridPanel implements PropertyChangeListener {
         int height = (maxY - minY + 1) * cellHeight;
 
         g.setColor(active ? Color.RED : Color.LIGHT_GRAY);
-        g.fillRect(minX * cellWidth, minY * cellHeight, width, height);
+        g.fillRect((minX - 1) * cellWidth, (minY - 1) * cellHeight, width, height);
 
         g.setColor(active ? Color.RED : Color.DARK_GRAY);
-        g.drawRect(minX * cellWidth, minY * cellHeight, width, height);
+        g.drawRect((minX - 1) * cellWidth, (minY - 1) * cellHeight, width, height);
     }
 
     private void initializeShips() {
+        ships = Blackboard.getInstance().getPlayerState().getMyShips();
+        if (!ships.isEmpty()) {
+            return;
+        }
+
         ships = new ArrayList<>();
 
         List<Point> ship1Points = new ArrayList<>();
@@ -107,8 +116,8 @@ public class ShipGridPanel extends GridPanel implements PropertyChangeListener {
         if (grid.x < 0 || grid.x >= cols || grid.y < 0 || grid.y >= rows)
             return;
 
-        int logicalX = grid.x;
-        int logicalY = grid.y;
+        int logicalX = grid.x + 1;
+        int logicalY = grid.y + 1;
 
         activeShip = boardShips[logicalY][logicalX];
         repaint();

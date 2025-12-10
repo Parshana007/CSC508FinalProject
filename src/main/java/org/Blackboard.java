@@ -70,17 +70,24 @@ public class Blackboard extends PropertyChangeSupport {
             case SUNK -> this.opponentState.addSunk(sunkCoords);
         }
 
+        System.out.println("this opponent hits: " + this.opponentState.getHits());
+        System.out.println("this opponent misses: " + this.opponentState.getMisses());
+
+        firePropertyChange("opponentStateUpdated", null, result);
+
         // Check if I won
         if (this.opponentState.allShipsSunk()) {
 //            firePropertyChange("gameOver", null, "me");
             this.gameFlow.setPhase(Phase.WONGAME);
             firePropertyChange("phase", null, Phase.WONGAME);
+            firePropertyChange("gameOver", null, "opponentWon");
         }
 
     }
 
     public void submitShipsPlacement() {
         firePropertyChange("shipsPlaced", null, null);
+        System.out.println("Ships Placed" + this.playerState.getMyShips());
     }
 
 

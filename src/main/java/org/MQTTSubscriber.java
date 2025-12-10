@@ -101,7 +101,10 @@ public class MQTTSubscriber implements MqttCallback, PropertyChangeListener {
 
             if (parts.length == 2 && parts[0].equals("GUESS")) {
                 Point coord = decodePoint(parts[1]);
+                // Calculate hit/miss and send result
                 Blackboard.getInstance().checkOppGuess(coord);
+                // Switch opponent's phase to GUESSING for this player
+                Blackboard.getInstance().getGameFlow().setPhase(Phase.GUESSING);
             } else if (parts[0].equals("RESULT")) {
                 MoveResult result = MoveResult.valueOf(parts[1]);
 
@@ -128,6 +131,13 @@ public class MQTTSubscriber implements MqttCallback, PropertyChangeListener {
                 System.out.println("Changed to phase: " + Blackboard.getInstance().getGameFlow().getPhase());
 //                }
             }
+            else if (parts[0].equals("GAME_OVER")) {
+                // Opponent just won
+                if (parts[1].equals("opponentWon")) {
+                    Blackboard.getInstance().getGameFlow().setPhase(Phase.LOSTGAME);
+                }
+            }
+
         }
     }
 

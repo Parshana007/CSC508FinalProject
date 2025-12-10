@@ -2,11 +2,10 @@ package org;
 
 public enum Phase {
    PLACEMENT, // placing the ships on a grid
-    GUESSING, // placing guesses on where opponents ships are
+    GUESSING, // my turn to place guesses of where I think shuips are
     WAITFOROPPONENTROOMID,
-    // waiting to enter room code opp, waiting for placement opp, waiting for guess opp
     WAITFOROPPONENTPLACEMENT,
-    WAITFOROPPONENTGUESS,
+    WAITFOROPPONENTGUESS, // opponents turn to place guesses not my turn
     WONGAME,
     LOSTGAME
 }

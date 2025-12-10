@@ -5,6 +5,7 @@ public class GameFlow {
     private String turn; // ME or OPP
     private boolean opponentReadyRoom = false;
     private boolean opponentReadyPlacement = false;
+    private boolean opponentFinishedTurn = false;
 
     public GameFlow() {
 
@@ -42,6 +43,14 @@ public class GameFlow {
 
     public boolean isOpponentReadyPlacement() {
         return opponentReadyPlacement;
+    }
+
+    public void setOpponentFinishedTurn(boolean opponentFinishedTurn) {
+        this.opponentFinishedTurn = opponentFinishedTurn;
+    }
+
+    public boolean isOpponentFinishedTurn() {
+        return opponentFinishedTurn;
     }
 
 }

@@ -65,7 +65,8 @@ public class MQTTPublisher implements PropertyChangeListener {
             else if (evt.getPropertyName().equals("guessResult")) {
                 PlayerMoveResult result = (PlayerMoveResult) evt.getNewValue();
 
-                String msg = "RESULT:" + result.getResult() + ":" + result.getCoordinate();
+                String msg = "RESULT:" + result.getResult() + ":" +
+                        encodePoint(result.getCoordinate());
 
                 // If SUNK, append all coordinates
                 if (result.getResult() == MoveResult.SUNK) {
@@ -83,6 +84,13 @@ public class MQTTPublisher implements PropertyChangeListener {
                 String msg = "SHIPS_PLACED";
                 client.publish(Blackboard.getInstance().getFullTopic(), new MqttMessage(msg.getBytes()));
             }
+
+            else if (evt.getPropertyName().equals("gameOver")) {
+                String msg = "GAME_OVER:" + evt.getNewValue();
+                client.publish(Blackboard.getInstance().getFullTopic(), new MqttMessage(msg.getBytes()));
+            }
+
+
 
         } catch (Exception e) {
             e.printStackTrace();
