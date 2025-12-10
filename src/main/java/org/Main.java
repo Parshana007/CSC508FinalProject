@@ -21,6 +21,10 @@ public class Main extends JFrame {
             m.setResizable(false);
             m.setVisible(true);
         });
+
+        MQTTPublisher publisher = new MQTTPublisher();
+        Blackboard.getInstance().addPropertyChangeListener(publisher);
+        MQTTSubscriber subscriber = new MQTTSubscriber();
     }
 }
 //

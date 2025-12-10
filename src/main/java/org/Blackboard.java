@@ -12,7 +12,9 @@ public class Blackboard extends PropertyChangeSupport {
     private GameFlow gameFlow;
     private String myPlayer; //random generated String
     private String roomID;
-    private int totalShips = 6;
+    private String broker = "tcp://broker.hivemq.com:1883";
+    private String topic = "calpoly/csc509/brokerverse/";
+    private int totalShips = 5;
 
     private Blackboard() {
         super(new Object());
@@ -38,7 +40,7 @@ public class Blackboard extends PropertyChangeSupport {
     }
 
     public void setMyPlayer(String myPlayer) {
-        this.myPlayer = myPlayer;
+        this.myPlayer = myPlayer.replaceAll(" ", "_");
     }
 
     public PlayerState getPlayerState() {
@@ -92,6 +94,26 @@ public class Blackboard extends PropertyChangeSupport {
 
     public String getRoomID() {
         return roomID;
+    }
+
+    public void setBroker(String broker) {
+        this.broker = broker;
+    }
+
+    public String getBroker() {
+        return broker;
+    }
+
+    public void setTopic(String topic) {
+        this.topic = topic;
+    }
+
+    public String getTopic() {
+        return topic;
+    }
+
+    public String getFullTopic() {
+        return topic + roomID;
     }
 
 }
