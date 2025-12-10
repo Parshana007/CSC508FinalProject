@@ -44,7 +44,13 @@ public class ScreenManager extends JPanel implements PropertyChangeListener {
         Phase newPhase = (Phase) evt.getNewValue();
         
         switch (newPhase) {
-            case WONGAME -> layout.show(this, WON);
+            case WONGAME -> {
+                if (waitingDialog != null) {
+                    waitingDialog.dispose();
+                    waitingDialog = null;
+                }
+                layout.show(this, WON);
+            }
             case LOSTGAME -> layout.show(this, LOST);
 
             case WAITFOROPPONENTROOMID, WAITFOROPPONENTPLACEMENT -> showWaitingPopup();

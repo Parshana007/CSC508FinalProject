@@ -48,8 +48,8 @@ public class OpponentGridPanel extends GridPanel implements PropertyChangeListen
         int col = currentGuess.x;
         int row = currentGuess.y;
 
-        int x = (col - 1) * cellWidth;
-        int y = (row - 1) * cellHeight;
+        int x = col * cellWidth;
+        int y = row * cellHeight;
 
         g.setColor(Color.ORANGE);
 
@@ -64,10 +64,10 @@ public class OpponentGridPanel extends GridPanel implements PropertyChangeListen
         System.out.println("HITS: " + hits);
         System.out.println("MISSES: " + misses);
 
-        for (int row = 1; row <= rows; row++) {
-            for (int col = 1; col <= cols; col++) {
-                int x = (col - 1) * cellWidth;
-                int y = (row - 1) * cellHeight;
+        for (int row = 0; row < rows; row++) {
+            for (int col = 0; col < cols; col++) {
+                int x = col * cellWidth;
+                int y = row * cellHeight;
 
 
                 Point coordinate = new Point(col, row);

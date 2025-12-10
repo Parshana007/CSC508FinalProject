@@ -59,10 +59,10 @@ public class ShipGridPanel extends GridPanel implements PropertyChangeListener {
         int height = (maxY - minY + 1) * cellHeight;
 
         g.setColor(active ? Color.RED : Color.LIGHT_GRAY);
-        g.fillRect((minX - 1) * cellWidth, (minY - 1) * cellHeight, width, height);
+        g.fillRect(minX * cellWidth, minY * cellHeight, width, height);
 
         g.setColor(active ? Color.RED : Color.DARK_GRAY);
-        g.drawRect((minX - 1) * cellWidth, (minY - 1) * cellHeight, width, height);
+        g.drawRect(minX * cellWidth, minY * cellHeight, width, height);
     }
 
     private void initializeShips() {
@@ -116,8 +116,8 @@ public class ShipGridPanel extends GridPanel implements PropertyChangeListener {
         if (grid.x < 0 || grid.x >= cols || grid.y < 0 || grid.y >= rows)
             return;
 
-        int logicalX = grid.x + 1;
-        int logicalY = grid.y + 1;
+        int logicalX = grid.x;
+        int logicalY = grid.y;
 
         activeShip = boardShips[logicalY][logicalX];
         repaint();
