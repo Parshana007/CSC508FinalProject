@@ -20,6 +20,7 @@ public class Blackboard extends PropertyChangeSupport {
     private String broker = "tcp://broker.hivemq.com:1883";
     private String topic = "calpoly/csc509/brokerverse/";
     private int totalShips = 5;
+    private AI ai;
 
     private Blackboard() {
         super(new Object());
@@ -27,6 +28,7 @@ public class Blackboard extends PropertyChangeSupport {
         this.opponentState = new OpponentState();
         this.gameFlow = new GameFlow();
         this.myPlayer = UUID.randomUUID().toString();
+        this.ai = new AI();
     }
 
     public static synchronized Blackboard getInstance() {
@@ -38,6 +40,10 @@ public class Blackboard extends PropertyChangeSupport {
 
     public String getMyPlayer() {
         return myPlayer;
+    }
+
+    public AI getAI() {
+        return this.ai;
     }
 
     public int getTotalShips() {

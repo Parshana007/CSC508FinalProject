@@ -56,7 +56,27 @@ public class GameScreen extends JPanel implements PropertyChangeListener {
             // Switch to waiting for opponent
             Blackboard.getInstance().getGameFlow().setPhase(Phase.WAITFOROPPONENTGUESS);
         });
-        add(submitButton, BorderLayout.SOUTH);
+
+        // --- New AI button ---
+        JButton aiButton = new JButton("Ask AI");
+        aiButton.setFont(new Font("SansSerif", Font.PLAIN, 14));
+        aiButton.setPreferredSize(new Dimension(120, 40));
+        aiButton.addActionListener(e -> {
+            showAIPopup();
+        });
+
+        // --- Panel to hold buttons ---
+        JPanel buttonPanel = new JPanel(new BorderLayout());
+        buttonPanel.add(submitButton, BorderLayout.CENTER); // main submit button
+        buttonPanel.add(aiButton, BorderLayout.EAST); // AI button on bottom-right
+
+        buttonPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
+        add(buttonPanel, BorderLayout.SOUTH);
+
+
+
+
+//        add(submitButton, BorderLayout.SOUTH);
 
 
         // Add spacing between components
@@ -73,6 +93,34 @@ public class GameScreen extends JPanel implements PropertyChangeListener {
         Blackboard.getInstance().addPropertyChangeListener(myGrid);
         Blackboard.getInstance().addPropertyChangeListener(oppGrid);
     }
+    private JDialog aiDialog;
+    private void showAIPopup() {
+
+        // Only create if not already open
+        if (aiDialog != null && aiDialog.isShowing()) return;
+
+        JFrame mainFrame = (JFrame) SwingUtilities.getWindowAncestor(this);
+
+        aiDialog = new JDialog(mainFrame, "AI Suggestion", true);
+        aiDialog.setLayout(new BorderLayout());
+
+        JLabel answerLabel = new JLabel("Thinking...", SwingConstants.CENTER);
+        answerLabel.setFont(new Font("SansSerif", Font.PLAIN, 16));
+        aiDialog.add(answerLabel, BorderLayout.CENTER);
+
+        aiDialog.setSize(400, 200);
+        aiDialog.setLocationRelativeTo(mainFrame);
+
+        // Fetch AI answer in a background thread to avoid freezing the UI
+        new Thread(() -> {
+            String aiAnswer = Blackboard.getInstance().getAI().getRecommendation();
+            SwingUtilities.invokeLater(() -> answerLabel.setText("<html><body style='text-align:center;'>" + aiAnswer + "</body></html>"));
+        }).start();
+
+        // Show the dialog
+        SwingUtilities.invokeLater(() -> aiDialog.setVisible(true));
+    }
+
 
     private JPanel wrapGridWithLabels(JPanel grid) {
         JPanel labeled = new JPanel(new BorderLayout());
