@@ -1,0 +1,112 @@
+//package csc508;
+package org;
+// public class AIPlayer extends Player {
+
+import java.awt.*;
+import java.util.List;
+import java.util.stream.Collectors;
+import java.awt.Point;
+import java.util.function.Function;
+
+public class AI {
+    private LlamaClient llama;
+
+    public AI() {
+        llama = new LlamaClient(Config.get("GROQ_API_KEY"));
+    }
+
+    public String getRecommendation() {
+
+        List<Point> hitList = Blackboard.getInstance().getOpponentState().getHits();
+        List<Point> missList = Blackboard.getInstance().getOpponentState().getMisses();
+        List<Ship> sunkList = Blackboard.getInstance().getOpponentState().getSunkShips();
+
+        Function<Point, String> toBattleship = p -> {
+            char col = (char) ('A' + p.x - 1); // 1 -> A, 2 -> B, etc.
+            int row = p.y;                      // already 1-based
+            return col + String.valueOf(row);
+        };
+        String hits = hitList.isEmpty() ? "empty" : hitList.stream().map(toBattleship).collect(Collectors.joining(", "));
+        String misses = missList.isEmpty() ? "empty" : missList.stream().map(toBattleship).collect(Collectors.joining(", "));
+        String sunk = sunkList.isEmpty() ? "empty" : sunkList.stream()
+                .map(ship -> ship.getCoordinates().stream().map(toBattleship).collect(Collectors.joining("-")))
+                .collect(Collectors.joining(", "));
+
+        // prompt sent to model
+        String prompt = """
+You are an AI agent playing Battleship on a 10x10 grid.
+
+Your task is to choose the NEXT coordinate to fire at.
+
+GAME RULES / CONSTRAINTS:
+- The grid uses columns A–J and rows 1–10.
+- Coordinates are written as column letter + row number, e.g., B2.
+- You MUST return exactly ONE coordinate.
+- Do NOT repeat a coordinate that is already a HIT or a MISS.
+- Do NOT choose coordinates belonging to already SUNK ships.
+- Output MUST be only the coordinate, no words, no explanation.
+
+CURRENT KNOWLEDGE:
+Hits so far: H = %HITS%
+Misses so far: M = %MISSES%
+Sunk ships: S = %SUNKSHIPS%
+
+STRATEGY REQUIREMENTS:
+- If there are adjacent hits forming a line, continue targeting along that line.
+- If there is a single isolated hit, check the 4 orthogonal neighbors (up, down, left, right) that are still valid.
+- If no hits exist, choose a reasonable search coordinate (e.g., checkerboard pattern).
+- You must avoid any coordinate already in H, M, or S.
+
+RETURN FORMAT:
+Column letter (A-J) + row number (1-10), e.g., B2.
+Output MUST be exactly one coordinate, nothing else.
+""";
+
+
+
+//        System.out.println("hits" + hits);
+//        System.out.println("misses" + Blackboard.getInstance().getPlayerState().getMyHitMiss().getMisses());
+
+        String finalPrompt = prompt
+                .replace("%HITS%", hits)
+                .replace("%MISSES%", misses)
+                .replace("%SUNKSHIPS%", sunk);
+        System.out.println(finalPrompt);
+
+        // sends prompt to model and get model answer
+        String nextMove = llama.ask(finalPrompt);
+
+        System.out.println("AI chooses: " + nextMove);
+
+        return nextMove;
+
+    }
+
+    public class BattleshipHelper {
+
+        // Convert (x,y) -> "A1" format
+        public static String toBattleshipCoord(int x, int y) {
+            char col = (char) ('A' + x - 1); // x:1->A, 2->B, ...
+            return col + String.valueOf(y);
+        }
+
+        // Convert a list of hits/misses
+        public static String convertPointsList(List<Point> points) {
+            if (points == null || points.isEmpty()) return "None";
+            return points.stream()
+                    .map(p -> toBattleshipCoord(p.x, p.y))
+                    .collect(Collectors.joining(", "));
+        }
+
+        // Convert sunk ships: list of list of points
+        public static String convertSunkShips(List<List<Point>> sunkShips) {
+            if (sunkShips == null || sunkShips.isEmpty()) return "None";
+            return sunkShips.stream()
+                    .map(ship -> ship.stream()
+                            .map(p -> toBattleshipCoord(p.x, p.y))
+                            .collect(Collectors.joining("-")))
+                    .collect(Collectors.joining(", "));
+        }
+    }
+
+}
