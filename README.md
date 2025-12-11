@@ -26,8 +26,26 @@ mvn exec:java -Dexec.mainClass="org.Main"
 mvn exec:java -Dexec.mainClass="org.Main"
 ```
 
-### 2. Enter player name and room code 
+### 3. Enter player name and room code 
 The room code must be the same for the two players that are playing against each other. The room code can be anything of the players' choice, and does not have to be a number.
+
+
+## GUI 
+Welcome Screen:
+<img width="1196" height="602" alt="Screenshot 2025-12-10 at 8 48 20 PM" src="https://github.com/user-attachments/assets/ed231a6c-8abb-4ae8-a833-b27ac1f3a9cd" />
+
+Placement Screen (where player decides where they want to place their ships)
+<img width="1195" height="596" alt="Screenshot 2025-12-10 at 8 48 51 PM" src="https://github.com/user-attachments/assets/5efe8f52-293a-4274-9a06-e1098ac1d8e1" />
+
+Guessing Screens:
+For Player1:
+<img width="1197" height="597" alt="Screenshot 2025-12-10 at 8 50 01 PM" src="https://github.com/user-attachments/assets/60d3b017-4982-4580-92cf-f53a9b42cc50" />
+
+For Player2:
+<img width="1197" height="604" alt="Screenshot 2025-12-10 at 8 50 45 PM" src="https://github.com/user-attachments/assets/eafec11f-b4ee-4a7b-9ad7-ccc64256707b" />
+
+AI Recommendation
+<img width="1195" height="598" alt="Screenshot 2025-12-10 at 8 51 19 PM" src="https://github.com/user-attachments/assets/87ef9376-c631-425e-8422-71a3e801f62e" />
 
 
 
