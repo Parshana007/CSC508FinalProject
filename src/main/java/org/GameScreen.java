@@ -6,8 +6,8 @@ import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 
 /**
- *  The main gameplay screen. Visualizes both my grid and the opponent's grid, and a button to submit my guess
- *  when it's my turn.
+ *  The main gameplay screen. Visualizes both my grid and the opponent's grid, a button to submit my guess
+ *  when it's my turn, and a button to ask the AI for a hint.
  */
 
 public class GameScreen extends JPanel implements PropertyChangeListener {
@@ -72,12 +72,6 @@ public class GameScreen extends JPanel implements PropertyChangeListener {
 
         buttonPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
         add(buttonPanel, BorderLayout.SOUTH);
-
-
-
-
-//        add(submitButton, BorderLayout.SOUTH);
-
 
         // Add spacing between components
         container.add(Box.createRigidArea(new Dimension(20, 0)));

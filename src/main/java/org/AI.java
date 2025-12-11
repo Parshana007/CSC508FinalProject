@@ -1,12 +1,13 @@
 //package csc508;
 package org;
-// public class AIPlayer extends Player {
-
-import java.awt.*;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.awt.Point;
 import java.util.function.Function;
+
+/**
+ * Handles creation of the prompt to send to the Groq API based on the current game board.
+ */
 
 public class AI {
     private LlamaClient llama;
@@ -28,7 +29,6 @@ public class AI {
         Function<Point, String> toBattleship = p -> {
             char col = numberToLetter(p.x);
             int row = p.y + 1;
-            System.out.println("THIS IS THE CONVERSION " + p.x + " " + p.y);
             return col + String.valueOf(row);
         };
         String hits = hitList.isEmpty() ? "empty" : hitList.stream().map(toBattleship).collect(Collectors.joining(", "));
@@ -67,11 +67,6 @@ Column letter (A-J) + row number (1-10), e.g., B2.
 Output MUST be exactly one coordinate, nothing else.
 """;
 
-
-
-//        System.out.println("hits" + hits);
-//        System.out.println("misses" + Blackboard.getInstance().getPlayerState().getMyHitMiss().getMisses());
-
         String finalPrompt = prompt
                 .replace("%HITS%", hits)
                 .replace("%MISSES%", misses)
@@ -81,37 +76,7 @@ Output MUST be exactly one coordinate, nothing else.
         // sends prompt to model and get model answer
         String nextMove = llama.ask(finalPrompt);
 
-        System.out.println("AI chooses: " + nextMove);
-
         return nextMove;
 
     }
-
-    public class BattleshipHelper {
-
-        // Convert (x,y) -> "A1" format
-        public static String toBattleshipCoord(int x, int y) {
-            char col = (char) ('A' + x - 1); // x:1->A, 2->B, ...
-            return col + String.valueOf(y);
-        }
-
-        // Convert a list of hits/misses
-        public static String convertPointsList(List<Point> points) {
-            if (points == null || points.isEmpty()) return "None";
-            return points.stream()
-                    .map(p -> toBattleshipCoord(p.x, p.y))
-                    .collect(Collectors.joining(", "));
-        }
-
-        // Convert sunk ships: list of list of points
-        public static String convertSunkShips(List<List<Point>> sunkShips) {
-            if (sunkShips == null || sunkShips.isEmpty()) return "None";
-            return sunkShips.stream()
-                    .map(ship -> ship.stream()
-                            .map(p -> toBattleshipCoord(p.x, p.y))
-                            .collect(Collectors.joining("-")))
-                    .collect(Collectors.joining(", "));
-        }
-    }
-
 }

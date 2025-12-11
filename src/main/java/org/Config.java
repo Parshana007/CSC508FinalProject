@@ -4,6 +4,10 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.Properties;
 
+/**
+ * Handles the configuration for connecting to the Groq API.
+ */
+
 public class Config {
 
     private static Properties props = new Properties();

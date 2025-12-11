@@ -2,6 +2,10 @@ package org;
 import java.net.http.*;
 import java.net.URI;
 
+/**
+ * Sends prompts to the Groq APi.
+ */
+
 public class LlamaClient {
 
     private final HttpClient client = HttpClient.newHttpClient();
