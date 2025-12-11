@@ -18,6 +18,10 @@ public class PlayerState {
         myHitMiss = new HitMiss();
     }
 
+    public HitMiss getHitMiss() {
+        return myHitMiss;
+    }
+
     public List<Ship> getMyShips() {
         return myShips;
     }

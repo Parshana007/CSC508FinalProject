@@ -15,15 +15,20 @@ public class AI {
         llama = new LlamaClient(Config.get("GROQ_API_KEY"));
     }
 
-    public String getRecommendation() {
+    public static char numberToLetter(int n) {
+        char[] letters = {'A','B','C','D','E','F','G','H','I','J'};
+        return letters[n];
+    }
 
+    public String getRecommendation() {
         List<Point> hitList = Blackboard.getInstance().getOpponentState().getHits();
         List<Point> missList = Blackboard.getInstance().getOpponentState().getMisses();
         List<Ship> sunkList = Blackboard.getInstance().getOpponentState().getSunkShips();
 
         Function<Point, String> toBattleship = p -> {
-            char col = (char) ('A' + p.x - 1); // 1 -> A, 2 -> B, etc.
-            int row = p.y;                      // already 1-based
+            char col = numberToLetter(p.x);
+            int row = p.y + 1;
+            System.out.println("THIS IS THE CONVERSION " + p.x + " " + p.y);
             return col + String.valueOf(row);
         };
         String hits = hitList.isEmpty() ? "empty" : hitList.stream().map(toBattleship).collect(Collectors.joining(", "));

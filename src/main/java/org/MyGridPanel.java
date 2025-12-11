@@ -35,6 +35,42 @@ public class MyGridPanel extends GridPanel implements PropertyChangeListener {
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
         drawShips(g);
+        drawHitMiss(g);
+    }
+
+    private void drawHitMiss(Graphics g) {
+        List<Point> hits = Blackboard.getInstance().getPlayerState().getHitMiss().getHits();
+        List<Point> misses = Blackboard.getInstance().getPlayerState().getHitMiss().getMisses();
+        List<Ship> sunk = Blackboard.getInstance().getPlayerState().getHitMiss().getSunkShips();
+        System.out.println("HITS: " + hits);
+        System.out.println("MISSES: " + misses);
+
+        for (int row = 0; row < rows; row++) {
+            for (int col = 0; col < cols; col++) {
+                int x = col * cellWidth;
+                int y = row * cellHeight;
+
+                Point coordinate = new Point(col, row);
+
+                if (hits.contains(coordinate)) {
+                    g.setColor(Color.RED);
+                    g.drawLine(x + 4, y + 4, x + cellWidth - 4, y + cellHeight - 4);
+                    g.drawLine(x + cellWidth - 4, y + 4, x + 4, y + cellHeight - 4);
+                } else if (misses.contains(coordinate)) {
+                    g.setColor(Color.WHITE);
+                    g.drawLine(x + 4, y + 4, x + cellWidth - 4, y + cellHeight - 4);
+                    g.drawLine(x + cellWidth - 4, y + 4, x + 4, y + cellHeight - 4);
+                }
+
+                for(Ship ship : sunk) {
+                    if (ship.getCoordinates().contains(coordinate)) {
+                        g.setColor(Color.RED);
+                        g.fillRect(x + 4, y + 4, cellWidth - 4, cellHeight - 4);
+                    }
+                }
+
+            }
+        }
     }
 
     private void drawShips(Graphics g) {

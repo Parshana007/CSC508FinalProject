@@ -87,7 +87,6 @@ public class OpponentGridPanel extends GridPanel implements PropertyChangeListen
 
     @Override
     public void mouseClicked(MouseEvent e) {
-
         Point grid = toGrid(e.getX(), e.getY());
         System.out.println("GRID x: " + grid.x + " y: " + grid.y);
 
