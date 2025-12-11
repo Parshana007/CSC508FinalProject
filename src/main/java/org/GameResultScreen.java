@@ -14,7 +14,6 @@ public class GameResultScreen extends JPanel {
         setLayout(new BorderLayout());
 
         JLabel resultLabel;
-        JButton replayButton;
 
         // Result label
         if (phase.equals(Phase.WONGAME)) {
@@ -25,9 +24,5 @@ public class GameResultScreen extends JPanel {
 
         resultLabel.setFont(new Font("Arial", Font.BOLD, 24));
         add(resultLabel, BorderLayout.CENTER);
-
-        // Replay button
-        replayButton = new JButton("Replay");
-        add(replayButton, BorderLayout.SOUTH);
     }
 }
